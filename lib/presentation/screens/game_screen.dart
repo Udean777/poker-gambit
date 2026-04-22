@@ -2,6 +2,7 @@ import 'package:card_games/core/constants/game_constants.dart';
 import 'package:card_games/core/theme/game_theme.dart';
 import 'package:card_games/domain/models/game_state.dart';
 import 'package:card_games/presentation/controllers/swap_animation_orchestrator.dart';
+import 'package:card_games/presentation/providers/game_notifier.dart';
 import 'package:card_games/presentation/providers/game_provider.dart';
 import 'package:card_games/presentation/widgets/animations/discard_animation.dart';
 import 'package:card_games/presentation/widgets/deck_pile.dart';
@@ -89,6 +90,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
     setState(() => _isAnimating = true);
     ref.read(gameProvider.notifier).setIsAnimating(true);
+    ref.read(gameProvider.notifier).cancelTimer();
 
     final deckCenter = _getWidgetCenter(_deckKey);
     final handCenter = _getWidgetCenter(_handKey);
