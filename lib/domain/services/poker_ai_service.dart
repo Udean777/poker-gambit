@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:card_games/domain/models/card_model.dart';
+import 'package:card_games/domain/services/i_poker_ai_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-class PokerAiService {
+class PokerAiService implements IPokerAiService {
   final String apiKey;
   late final GenerativeModel _model;
 
@@ -15,6 +16,7 @@ class PokerAiService {
     );
   }
 
+  @override
   Future<Map<String, dynamic>> decideDiscard(
     List<CardModel> aiHand, {
     bool canWait = true,
@@ -87,6 +89,7 @@ IMPORTANT: 'indices' must be an array of card indices (0-4) to discard. Maximum 
     };
   }
 
+  @override
   Future<List<int>> decidePlayOrder(
     List<CardModel> aiHand,
     List<CardModel> playerCardsOnTable,

@@ -2,6 +2,7 @@ import 'package:card_games/core/constants/game_constants.dart';
 import 'package:card_games/core/theme/game_theme.dart';
 import 'package:card_games/domain/models/game_state.dart';
 import 'package:card_games/presentation/controllers/swap_animation_orchestrator.dart';
+import 'package:card_games/presentation/providers/game_notifier.dart';
 import 'package:card_games/presentation/providers/game_provider.dart';
 import 'package:card_games/presentation/widgets/animations/discard_animation.dart';
 import 'package:card_games/presentation/widgets/deck_pile.dart';
@@ -108,11 +109,11 @@ class _GameScreenState extends ConsumerState<GameScreen>
       cardHeight: GameConstants.cardHeight,
       isPlayer: true,
       onDiscardComplete: () {
-        ref.read(gameProvider.notifier).discardSelectedCards();
+        ref.read(gameProvider.notifier).aiDiscardSelectedCards();
         ref.read(gameProvider.notifier).setIsAnimating(false);
       },
       onDrawComplete: () {
-        ref.read(gameProvider.notifier).drawNewCards();
+        ref.read(gameProvider.notifier).aiDrawNewCards();
       },
     );
 

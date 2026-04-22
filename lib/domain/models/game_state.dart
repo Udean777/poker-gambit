@@ -24,6 +24,7 @@ class GameState {
   final int timeLeft;
   final bool isPaused;
   final bool qteActive;
+  final int highScore;
 
   const GameState({
     required this.deck,
@@ -45,6 +46,7 @@ class GameState {
     this.timeLeft = 0,
     this.isPaused = false,
     this.qteActive = false,
+    this.highScore = 0,
   });
 
   int get totalTableCards => playerTableCards.length + aiTableCards.length;
@@ -70,6 +72,7 @@ class GameState {
     int? timeLeft,
     bool? isPaused,
     bool? qteActive,
+    int? highScore,
   }) {
     return GameState(
       deck: deck ?? this.deck,
@@ -91,6 +94,7 @@ class GameState {
       timeLeft: timeLeft ?? this.timeLeft,
       isPaused: isPaused ?? this.isPaused,
       qteActive: qteActive ?? this.qteActive,
+      highScore: highScore ?? this.highScore,
     );
   }
 
@@ -117,7 +121,8 @@ class GameState {
           isAnimating == other.isAnimating &&
           timeLeft == other.timeLeft &&
           isPaused == other.isPaused &&
-          qteActive == other.qteActive;
+          qteActive == other.qteActive &&
+          highScore == other.highScore;
 
   @override
   int get hashCode =>
@@ -139,5 +144,6 @@ class GameState {
       isAnimating.hashCode ^
       timeLeft.hashCode ^
       isPaused.hashCode ^
-      qteActive.hashCode;
+      qteActive.hashCode ^
+      highScore.hashCode;
 }

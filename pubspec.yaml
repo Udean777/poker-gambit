@@ -21,6 +21,7 @@ dependencies:
   audioplayers: ^5.2.1   # Sound effects
   google_generative_ai: ^0.4.7
   flutter_dotenv: ^6.0.1
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
