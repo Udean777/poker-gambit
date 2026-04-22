@@ -110,8 +110,8 @@ lib/
 
 ## 👤 Author
 
-**ssajudn**
+**ssajudn** ft. **Antigravity**
 
 ---
 
-Made with ❤️ and Flutter.
+Made by Me ft. Antigravity.
