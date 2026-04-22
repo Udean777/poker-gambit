@@ -21,7 +21,30 @@ class EvaluateRoundUseCase {
       newAiScore++;
       resultMessage = 'KALAH! AI punya ${aiResult.rank.label}';
     } else {
-      resultMessage = 'SERI! Keduanya ${playerResult.rank.label}';
+      int winner = 0;
+      for (
+        int i = 0;
+        i < playerResult.kickers.length && i < aiResult.kickers.length;
+        i++
+      ) {
+        if (playerResult.kickers[i] > aiResult.kickers[i]) {
+          winner = 1;
+          break;
+        } else if (aiResult.kickers[i] > playerResult.kickers[i]) {
+          winner = -1;
+          break;
+        }
+      }
+
+      if (winner == 1) {
+        newPlayerScore++;
+        resultMessage = 'MENANG! ${playerResult.rank.label}';
+      } else if (winner == -1) {
+        newAiScore++;
+        resultMessage = 'KALAH! AI punya ${aiResult.rank.label}';
+      } else {
+        resultMessage = 'SERI! Keduanya ${playerResult.rank.label}';
+      }
     }
 
     return currentState.copyWith(

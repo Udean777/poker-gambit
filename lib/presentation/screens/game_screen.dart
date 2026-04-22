@@ -90,6 +90,7 @@ class _GameScreenState extends ConsumerState<GameScreen>
 
     setState(() => _isAnimating = true);
     ref.read(gameProvider.notifier).setIsAnimating(true);
+    ref.read(gameProvider.notifier).cancelTimer();
 
     final deckCenter = _getWidgetCenter(_deckKey);
     final handCenter = _getWidgetCenter(_handKey);
@@ -109,11 +110,11 @@ class _GameScreenState extends ConsumerState<GameScreen>
       cardHeight: GameConstants.cardHeight,
       isPlayer: true,
       onDiscardComplete: () {
-        ref.read(gameProvider.notifier).aiDiscardSelectedCards();
+        ref.read(gameProvider.notifier).discardSelectedCards();
         ref.read(gameProvider.notifier).setIsAnimating(false);
       },
       onDrawComplete: () {
-        ref.read(gameProvider.notifier).aiDrawNewCards();
+        ref.read(gameProvider.notifier).drawNewCards();
       },
     );
 

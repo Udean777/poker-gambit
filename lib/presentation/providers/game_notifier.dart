@@ -57,13 +57,15 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
 
   Future<void> _init() async {
     final highScore = await _getHighScoreUseCase.execute();
-    state = state.copyWith(highScore: highScore);
-    startNewGame();
+    state = _startNewGameUseCase.execute(highScore: highScore);
+    startTurnTimer();
   }
 
   void setIsAnimating(bool value) => state = state.copyWith(isAnimating: value);
   void togglePause() => state = state.copyWith(isPaused: !state.isPaused);
-  void startNewGame() => state = _startNewGameUseCase.execute();
+  void startNewGame() {
+    state = _startNewGameUseCase.execute(highScore: state.highScore);
+  }
 
   // ─── Timer Orchestration ──────────────────────────────────────────
 
@@ -111,19 +113,33 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
   }
 
   void executeDraw() {
-    cancelTimer();
     if (state.phase != GamePhase.drawing && state.phase != GamePhase.playing ||
         !state.playerCanSwap) {
       return;
     }
+    cancelTimer();
+    discardSelectedCards();
+    drawNewCards();
+  }
 
+  void discardSelectedCards() {
+    if (state.phase != GamePhase.drawing && state.phase != GamePhase.playing ||
+        !state.playerCanSwap) {
+      return;
+    }
     state = state.copyWith(
       playerHand: CardUtils.removeAtIndices(
         state.playerHand,
         state.selectedIndices,
       ),
     );
+  }
 
+  void drawNewCards() {
+    if (state.phase != GamePhase.drawing && state.phase != GamePhase.playing ||
+        !state.playerCanSwap) {
+      return;
+    }
     final isInitial = state.phase == GamePhase.drawing;
     state = _swapCardsUseCase.execute(
       currentState: state,
@@ -171,7 +187,13 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
       canWait: true,
     );
     final action = decision['action'] as String;
-    final indices = List<int>.from(decision['indices'] as List);
+    final indices =
+        (decision['indices'] as List)
+            .cast<int>()
+            .toSet()
+            .where((i) => i >= 0 && i < state.aiHand.length)
+            .toList()
+          ..sort((a, b) => b.compareTo(a));
 
     if (action == 'swap' && indices.isNotEmpty) {
       state = state.copyWith(
@@ -237,26 +259,39 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
   // ─── Card Effects & Evaluation ────────────────────────────────────
 
   Future<void> _applyCardEffect(CardModel card, bool isPlayer) async {
+    bool shouldApply = true;
+
     if (!isPlayer &&
         (card.valueLabel == 'J' || card.valueLabel == 'Q' || card.isJoker)) {
       state = state.copyWith(qteActive: true, message: 'AI SKILL! COUNTER!');
       await Future.delayed(GameConstants.qteDuration);
       if (!state.qteActive) {
-        state = await _applyCardEffectUseCase.execute(
-          card,
-          state,
-          isPlayer: isPlayer,
-        );
-        state = state.copyWith(qteActive: false);
-        return;
+        shouldApply = false;
       }
       state = state.copyWith(qteActive: false);
     }
-    state = await _applyCardEffectUseCase.execute(
-      card,
-      state,
-      isPlayer: isPlayer,
-    );
+
+    if (shouldApply) {
+      state = await _applyCardEffectUseCase.execute(
+        card,
+        state,
+        isPlayer: isPlayer,
+      );
+
+      // Orchestrate temporary reveal for Spy effect (J card)
+      if (card.valueLabel == 'J') {
+        await Future.delayed(GameConstants.spyRevealDuration);
+        if (mounted) {
+          final targetHand = isPlayer ? state.aiHand : state.playerHand;
+          final hiddenHand = targetHand
+              .map((c) => c.copyWith(isFaceUp: false))
+              .toList();
+          state = isPlayer
+              ? state.copyWith(aiHand: hiddenHand)
+              : state.copyWith(playerHand: hiddenHand);
+        }
+      }
+    }
   }
 
   Future<void> evaluateRound() async {

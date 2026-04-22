@@ -73,7 +73,9 @@ void main() {
     );
 
     when(() => mockGetHighScore.execute()).thenAnswer((_) async => 100);
-    when(() => mockStartNewGame.execute()).thenReturn(initialState);
+    when(
+      () => mockStartNewGame.execute(highScore: any(named: 'highScore')),
+    ).thenReturn(initialState);
 
     notifier = GameNotifier(
       startNewGameUseCase: mockStartNewGame,
@@ -97,7 +99,9 @@ void main() {
 
       expect(notifier.state.highScore, 100);
       verify(() => mockGetHighScore.execute()).called(1);
-      verify(() => mockStartNewGame.execute()).called(1);
+      verify(
+        () => mockStartNewGame.execute(highScore: any(named: 'highScore')),
+      ).called(1);
     });
 
     test('toggleCardSelection should add/remove indices', () {

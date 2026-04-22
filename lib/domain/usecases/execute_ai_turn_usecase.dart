@@ -34,20 +34,26 @@ class ExecuteAiTurnUseCase {
       );
 
       if (decision['action'] == 'swap') {
-        final indices = List<int>.from(decision['indices'] as List);
-        if (indices.isNotEmpty) {
-          for (final index in indices) {
-            if (currentDeck.isNotEmpty && index < currentAiHand.length) {
-              currentAiHand[index] = currentDeck.removeAt(0);
-            }
+        final indices = (decision['indices'] as List? ?? [])
+            .cast<int>()
+            .toSet()
+            .where((i) => i >= 0 && i < currentAiHand.length)
+            .toList();
+
+        for (final index in indices) {
+          if (currentDeck.isNotEmpty) {
+            currentAiHand[index] = currentDeck.removeAt(0);
           }
-          currentState = currentState.copyWith(
-            deck: currentDeck,
-            aiHand: currentAiHand,
-            aiCanSwap: false,
-            message: 'AI menukar kartu: ${decision['message']}',
-          );
         }
+
+        currentState = currentState.copyWith(
+          deck: currentDeck,
+          aiHand: currentAiHand,
+          aiCanSwap: false,
+          message: indices.isNotEmpty
+              ? 'AI menukar kartu: ${decision['message']}'
+              : 'AI batal menukar: ${decision['message']}',
+        );
       } else {
         currentState = currentState.copyWith(aiCanSwap: false);
       }

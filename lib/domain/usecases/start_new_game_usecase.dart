@@ -7,7 +7,7 @@ class StartNewGameUseCase {
 
   StartNewGameUseCase(this._deckService);
 
-  GameState execute() {
+  GameState execute({int highScore = 0}) {
     final deck = _deckService.createShuffledDeck();
     final deal = _deckService.dealInitialHands(deck);
 
@@ -15,6 +15,7 @@ class StartNewGameUseCase {
       deck: deal.remainingDeck,
       playerHand: deal.playerHand,
       aiHand: deal.aiHand,
+      highScore: highScore,
       phase: GamePhase.drawing,
       message:
           'Fase Tukar: Pilih kartu yang ingin diganti (Maks ${GameConstants.maxSwapCards}).',
