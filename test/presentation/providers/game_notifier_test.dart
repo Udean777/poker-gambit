@@ -1,18 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:card_games/domain/models/game_state.dart';
-import 'package:card_games/domain/services/i_poker_ai_service.dart';
-import 'package:card_games/domain/services/i_deck_service.dart';
-import 'package:card_games/domain/logic/i_poker_evaluator.dart';
-import 'package:card_games/domain/usecases/start_new_game_usecase.dart';
-import 'package:card_games/domain/usecases/swap_cards_usecase.dart';
-import 'package:card_games/domain/usecases/play_card_usecase.dart';
-import 'package:card_games/domain/usecases/evaluate_round_usecase.dart';
-import 'package:card_games/domain/usecases/execute_ai_turn_usecase.dart';
-import 'package:card_games/domain/usecases/apply_card_effect_usecase.dart';
-import 'package:card_games/domain/usecases/get_high_score_usecase.dart';
-import 'package:card_games/domain/usecases/save_high_score_usecase.dart';
-import 'package:card_games/presentation/providers/game_notifier.dart';
+import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
+import 'package:card_games/features/game/domain/services/i_deck_service.dart';
+import 'package:card_games/features/game/domain/logic/i_poker_evaluator.dart';
+import 'package:card_games/features/game/domain/usecases/start_new_game_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/swap_cards_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/play_card_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/evaluate_round_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/execute_ai_turn_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/apply_card_effect_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/get_high_score_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/save_high_score_usecase.dart';
+import 'package:card_games/features/game/presentation/providers/game_notifier.dart';
 
 // Mocks
 class MockStartNewGameUseCase extends Mock implements StartNewGameUseCase {}
