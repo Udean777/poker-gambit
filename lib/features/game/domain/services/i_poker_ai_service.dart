@@ -5,11 +5,13 @@ abstract class IPokerAiService {
   Future<Map<String, dynamic>> decideDiscard(
     List<CardModel> aiHand, {
     bool canWait = true,
+    int timeLeft = 0,
   });
 
   /// Decides the order in which the AI should play its cards.
   Future<List<int>> decidePlayOrder(
     List<CardModel> aiHand,
-    List<CardModel> playerCardsOnTable,
-  );
+    List<CardModel> playerCardsOnTable, {
+    int timeLeft = 0,
+  });
 }

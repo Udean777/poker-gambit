@@ -12,7 +12,7 @@ import 'package:card_games/features/game/domain/repositories/i_game_repository.d
 import 'package:card_games/features/game/domain/services/deck_service.dart';
 import 'package:card_games/features/game/domain/services/i_deck_service.dart';
 import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
-import 'package:card_games/features/game/domain/services/poker_ai_service.dart';
+import 'package:card_games/features/game/domain/services/local_poker_ai_service.dart';
 import 'package:card_games/features/game/domain/usecases/apply_card_effect_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/evaluate_round_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/execute_ai_turn_usecase.dart';
@@ -22,7 +22,6 @@ import 'package:card_games/features/game/domain/usecases/save_game_result_usecas
 import 'package:card_games/features/game/domain/usecases/start_new_game_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/swap_cards_usecase.dart';
 import 'package:card_games/features/game/presentation/providers/game_notifier.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final pokerEvaluatorProvider = Provider<IPokerEvaluator>(
@@ -32,8 +31,7 @@ final pokerEvaluatorProvider = Provider<IPokerEvaluator>(
 final deckServiceProvider = Provider<IDeckService>((ref) => DeckService());
 
 final aiServiceProvider = Provider<IPokerAiService>((ref) {
-  final apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
-  return PokerAiService(apiKey: apiKey);
+  return LocalPokerAiService(ref.watch(pokerEvaluatorProvider));
 });
 
 final startNewGameUseCaseProvider = Provider((ref) {

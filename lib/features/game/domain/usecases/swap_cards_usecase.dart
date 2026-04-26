@@ -1,3 +1,4 @@
+import 'package:card_games/features/game/domain/models/card_model.dart';
 import 'package:card_games/features/game/domain/models/game_state.dart';
 import 'package:card_games/features/game/domain/services/i_deck_service.dart';
 
@@ -50,7 +51,8 @@ class SwapCardsUseCase {
         );
       }
     } else {
-      // AI Logic
+      // AI Logic: Append drawn cards.
+      // Discard is handled by aiDiscardSelectedCards during animation.
       return currentState.copyWith(
         deck: draw.remainingDeck,
         aiHand: [...currentState.aiHand, ...draw.drawnCards],

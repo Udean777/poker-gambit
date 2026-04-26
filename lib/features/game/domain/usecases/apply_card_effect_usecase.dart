@@ -37,7 +37,9 @@ class ApplyCardEffectUseCase {
 
       if (card3.suit != card4.suit && !card4.isJoker && !card3.isJoker) {
         final invalidatedTable = List<CardModel>.from(table);
-        invalidatedTable[3] = card4.copyWith(value: 0); // Value 0 = invalid
+        invalidatedTable[3] = card4.copyWith(
+          isInvalid: true,
+        ); // Marked as invalid
 
         return isPlayer
             ? state.copyWith(

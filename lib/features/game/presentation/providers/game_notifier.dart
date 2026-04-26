@@ -39,17 +39,17 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
     required SaveGameResultUseCase saveGameResultUseCase,
     required IPokerAiService aiService,
     required IDeckService deckService,
-  })  : _startNewGameUseCase = startNewGameUseCase,
-        _swapCardsUseCase = swapCardsUseCase,
-        _playCardUseCase = playCardUseCase,
-        _evaluateRoundUseCase = evaluateRoundUseCase,
-        _executeAiTurnUseCase = executeAiTurnUseCase,
-        _applyCardEffectUseCase = applyCardEffectUseCase,
-        _getStatsUseCase = getStatsUseCase,
-        _saveGameResultUseCase = saveGameResultUseCase,
-        _aiService = aiService,
-        _deckService = deckService,
-        super(const GameState(deck: [], playerHand: [], aiHand: [])) {
+  }) : _startNewGameUseCase = startNewGameUseCase,
+       _swapCardsUseCase = swapCardsUseCase,
+       _playCardUseCase = playCardUseCase,
+       _evaluateRoundUseCase = evaluateRoundUseCase,
+       _executeAiTurnUseCase = executeAiTurnUseCase,
+       _applyCardEffectUseCase = applyCardEffectUseCase,
+       _getStatsUseCase = getStatsUseCase,
+       _saveGameResultUseCase = saveGameResultUseCase,
+       _aiService = aiService,
+       _deckService = deckService,
+       super(const GameState(deck: [], playerHand: [], aiHand: [])) {
     _init();
   }
 
@@ -75,16 +75,20 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
           if (mounted) executeDraw();
         },
       );
-    } else if (state.phase == GamePhase.playing && state.isPlayerTurn) {
+    } else if (state.phase == GamePhase.playing) {
+      // Both Player and AI have a visible timer during their turn
       startTimer(GameConstants.playPhaseSeconds, onTimeout: _onPlayTimeout);
     }
   }
 
   void _onPlayTimeout() {
-    if (state.phase == GamePhase.playing &&
-        state.isPlayerTurn &&
-        state.playerHand.isNotEmpty) {
-      playCard(state.playerHand.first);
+    if (state.phase == GamePhase.playing) {
+      if (state.isPlayerTurn && state.playerHand.isNotEmpty) {
+        playCard(state.playerHand.first);
+      }
+      // For AI, it usually completes its turn via API before the timer runs out.
+      // If it times out, the API call might still be pending, so we don't force a card play here
+      // to avoid race conditions with the actual AI response.
     }
   }
 
@@ -144,6 +148,8 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
       selectedIndices: state.selectedIndices,
     );
     if (isInitial) {
+      // Start a visual timer for the AI's turn to swap
+      startTimer(GameConstants.drawPhaseSeconds, onTimeout: () {});
       Future.delayed(GameConstants.aiSwapDelay, _executeAiSwapPhase);
     }
   }
@@ -173,6 +179,7 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
       );
       startTurnTimer();
     } else {
+      startTurnTimer(); // Start timer for AI turn
       Future.delayed(GameConstants.aiPlayDelay, _executeAiTurn);
     }
   }
@@ -180,9 +187,13 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
   // ─── AI Orchestration ─────────────────────────────────────────────
 
   Future<void> _executeAiSwapPhase() async {
+    // Berikan jeda berpikir agar tidak terlalu kaku
+    await Future.delayed(const Duration(milliseconds: 1200));
+
     final decision = await _aiService.decideDiscard(
       state.aiHand,
       canWait: true,
+      timeLeft: state.timeLeft,
     );
     final action = decision['action'] as String;
     final indices =
@@ -247,6 +258,7 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
         isPlayerTurn: false,
         message: 'AI lanjut bermain...',
       );
+      startTurnTimer(); // Start timer for chained AI turn
       Future.delayed(GameConstants.aiPlayDelay, _executeAiTurn);
     } else {
       state = state.copyWith(isPlayerTurn: true, phase: GamePhase.playing);

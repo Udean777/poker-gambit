@@ -1,4 +1,3 @@
-import 'package:card_games/core/theme/game_theme.dart';
 import 'package:card_games/features/game/presentation/widgets/card_container.dart';
 import 'package:flutter/material.dart';
 
@@ -53,10 +52,13 @@ class _DeckPileState extends State<DeckPile>
               (widget.remainingCards / 5).clamp(1, 5).toInt(),
               (index) => Padding(
                 padding: EdgeInsets.only(top: index * 2.0, left: index * 2.0),
-                child: const CardContainer(
-                  color: GameTheme.cardBackBlue,
-                  child: Center(
-                    child: Icon(Icons.style, size: 30, color: Colors.white12),
+                child: CardContainer(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.asset(
+                      'assets/images/cards/card-back.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -73,13 +75,12 @@ class _DeckPileState extends State<DeckPile>
                     opacity: 1 - _controller.value,
                     child: Transform.scale(
                       scale: 1 + _controller.value * 0.1,
-                      child: const CardContainer(
-                        color: GameTheme.cardBackBlue,
-                        child: Center(
-                          child: Icon(
-                            Icons.style,
-                            size: 30,
-                            color: Colors.white12,
+                      child: CardContainer(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
+                            'assets/images/cards/card-back.png',
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),

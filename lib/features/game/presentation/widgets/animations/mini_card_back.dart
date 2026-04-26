@@ -1,5 +1,4 @@
 import 'package:card_games/core/constants/game_constants.dart';
-import 'package:card_games/core/theme/game_theme.dart';
 import 'package:card_games/features/game/presentation/widgets/card_container.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +14,14 @@ class MiniCardBack extends StatelessWidget {
       width: GameConstants.miniCardWidth,
       height: GameConstants.miniCardHeight,
       child: CardContainer(
-        color: GameTheme.cardBackBlue,
-        child: const Center(
-          child: Icon(Icons.style, size: 30, color: Colors.white24),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Image.asset(
+            'assets/images/cards/card-back.png',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
         ),
       ),
     );

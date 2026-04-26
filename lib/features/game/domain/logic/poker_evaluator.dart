@@ -20,9 +20,9 @@ class PokerEvaluator implements IPokerEvaluator {
       processedHand[2] = processedHand[2].copyWith(value: 20 + originalVal);
     }
 
-    // Filter out cards invalidated by Suit Lock (value 0)
+    // Filter out cards invalidated by Suit Lock (isInvalid == true)
     // We treat them as "blank" cards that don't contribute to combos
-    final activeCards = processedHand.where((c) => c.value > 0).toList();
+    final activeCards = processedHand.where((c) => !c.isInvalid).toList();
 
     // If we have less than 5 active cards, evaluation continues with fewer cards
     // which naturally results in a lower rank.

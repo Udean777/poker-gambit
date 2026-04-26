@@ -22,47 +22,14 @@ class ExecuteAiTurnUseCase {
   Future<AiTurnResult?> execute(GameState state) async {
     if (state.aiHand.isEmpty) return null;
 
-    var currentDeck = List<CardModel>.from(state.deck);
     var currentAiHand = List<CardModel>.from(state.aiHand);
     var currentState = state;
 
-    // 1. Mid-game swap opportunity
-    if (state.aiCanSwap) {
-      final decision = await _aiService.decideDiscard(
-        currentAiHand,
-        canWait: false,
-      );
-
-      if (decision['action'] == 'swap') {
-        final indices = (decision['indices'] as List? ?? [])
-            .cast<int>()
-            .toSet()
-            .where((i) => i >= 0 && i < currentAiHand.length)
-            .toList();
-
-        for (final index in indices) {
-          if (currentDeck.isNotEmpty) {
-            currentAiHand[index] = currentDeck.removeAt(0);
-          }
-        }
-
-        currentState = currentState.copyWith(
-          deck: currentDeck,
-          aiHand: currentAiHand,
-          aiCanSwap: false,
-          message: indices.isNotEmpty
-              ? 'AI menukar kartu: ${decision['message']}'
-              : 'AI batal menukar: ${decision['message']}',
-        );
-      } else {
-        currentState = currentState.copyWith(aiCanSwap: false);
-      }
-    }
-
-    // 2. Choose which card to play
+    // 1. Choose which card to play
     final playIndices = await _aiService.decidePlayOrder(
       currentAiHand,
       state.playerTableCards,
+      timeLeft: state.timeLeft,
     );
 
     final chosenIndex =

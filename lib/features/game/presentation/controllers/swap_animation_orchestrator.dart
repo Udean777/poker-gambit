@@ -50,6 +50,7 @@ class SwapAnimationOrchestrator {
           items: discardItems,
           controller: controller,
           isPlayer: isPlayer,
+          deckCenter: deckCenter,
         ),
       );
     }

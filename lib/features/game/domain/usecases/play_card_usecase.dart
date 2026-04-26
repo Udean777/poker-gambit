@@ -24,6 +24,7 @@ class PlayCardUseCase {
       return currentState.copyWith(
         playerHand: List.from(currentState.playerHand)..remove(card),
         playerTableCards: [...currentState.playerTableCards, playedCard],
+        selectedIndices: const [], // Clear swap selection when a card is played
         isPlayerTurn: false,
         message: 'AI sedang menganalisis meja...',
       );
@@ -44,6 +45,8 @@ class PlayCardUseCase {
       return currentState.copyWith(
         aiHand: List.from(currentState.aiHand)..remove(card),
         aiTableCards: [...currentState.aiTableCards, playedCard],
+        aiSelectedIndices:
+            const [], // Clear AI swap selection when a card is played
         isPlayerTurn: true,
         message: 'Giliran Anda!',
       );

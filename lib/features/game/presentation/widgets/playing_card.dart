@@ -45,20 +45,18 @@ class PlayingCard extends StatelessWidget {
     return Transform(
       transform: Matrix4.identity()..rotateY(pi),
       alignment: Alignment.center,
-      child: CardContainer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(card.suitIcon, style: const TextStyle(fontSize: 24)),
-            Text(
-              card.valueLabel,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+      child: Opacity(
+        opacity: card.isInvalid ? 0.4 : 1.0,
+        child: CardContainer(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.asset(
+              card.assetPath,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -66,9 +64,14 @@ class PlayingCard extends StatelessWidget {
 
   Widget _buildBack() {
     return CardContainer(
-      color: Colors.blue.shade900,
-      child: const Center(
-        child: Icon(Icons.style, size: 40, color: Colors.white24),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.asset(
+          'assets/images/cards/card-back.png',
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        ),
       ),
     );
   }

@@ -20,7 +20,7 @@ class PokerTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasCards = playerTableCards.isNotEmpty || aiTableCards.isNotEmpty;
+    // final hasCards = playerTableCards.isNotEmpty || aiTableCards.isNotEmpty;
 
     return DragTarget<CardModel>(
       onWillAcceptWithDetails: (details) =>
@@ -42,20 +42,14 @@ class PokerTable extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: !hasCards
-                ? const Icon(
-                    Icons.add_circle_outline,
-                    color: Colors.white10,
-                    size: 50,
-                  )
-                : SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: _TableCardsGrid(
-                      playerCards: playerTableCards,
-                      aiCards: aiTableCards,
-                      isShowdown: isShowdown,
-                    ),
-                  ),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: _TableCardsGrid(
+                playerCards: playerTableCards,
+                aiCards: aiTableCards,
+                isShowdown: isShowdown,
+              ),
+            ),
           ),
         );
       },
@@ -79,44 +73,40 @@ class _TableCardsGrid extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (aiCards.isNotEmpty) ...[
-          const Text(
-            "AI",
+        const Text(
+          "AI BOARD",
+          style: TextStyle(
+            color: Colors.redAccent,
+            fontSize: 9,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2,
+          ),
+        ),
+        const SizedBox(height: 8),
+        _CompactCardRow(cards: aiCards, isSpread: isShowdown, isAi: true),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: Text(
+            "VS",
             style: TextStyle(
-              color: Colors.redAccent,
-              fontSize: 9,
+              color: Colors.amber,
               fontWeight: FontWeight.bold,
-              letterSpacing: 2,
+              fontSize: 14,
+              letterSpacing: 4,
             ),
           ),
-          const SizedBox(height: 2),
-          _CompactCardRow(cards: aiCards, isSpread: isShowdown),
-        ],
-        if (aiCards.isNotEmpty && playerCards.isNotEmpty)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 4),
-            child: Text(
-              "VS",
-              style: TextStyle(
-                color: Colors.amber,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
+        ),
+        _CompactCardRow(cards: playerCards, isSpread: isShowdown, isAi: false),
+        const SizedBox(height: 8),
+        const Text(
+          "YOUR BOARD",
+          style: TextStyle(
+            color: Colors.blueAccent,
+            fontSize: 9,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2,
           ),
-        if (playerCards.isNotEmpty) ...[
-          _CompactCardRow(cards: playerCards, isSpread: isShowdown),
-          const SizedBox(height: 2),
-          const Text(
-            "YOU",
-            style: TextStyle(
-              color: Colors.blueAccent,
-              fontSize: 9,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
-            ),
-          ),
-        ],
+        ),
       ],
     );
   }
@@ -125,51 +115,134 @@ class _TableCardsGrid extends StatelessWidget {
 class _CompactCardRow extends StatelessWidget {
   final List<CardModel> cards;
   final bool isSpread;
+  final bool isAi;
 
-  const _CompactCardRow({required this.cards, this.isSpread = false});
+  const _CompactCardRow({
+    required this.cards,
+    this.isSpread = false,
+    required this.isAi,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final double spreadWidth = isSpread ? 52.0 : 26.0;
+    final double spreadWidth = isSpread ? 52.0 : 30.0;
 
     return SizedBox(
-      height: 100,
-      width: 300,
+      height: 130,
+      width: 320,
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
-          // Background Slot Placeholders
+          // Background Slot Placeholders (Premium Glassmorphism)
           ...List.generate(5, (index) {
             final offset = (index - 2) * spreadWidth;
             String label = "";
-            if (index == 2) label = "x2";
-            if (index == 3) label = "LOCK";
+            Color slotColor = Colors.white.withValues(alpha: 0.08);
+            IconData icon = Icons.crop_free;
+            bool isSpecial = false;
+
+            if (index == 2) {
+              label = "x2";
+              slotColor = Colors.amber;
+              icon = Icons.bolt;
+              isSpecial = true;
+            }
+            if (index == 3) {
+              label = "LOCK";
+              slotColor = Colors.blueAccent;
+              icon = Icons.lock_open;
+              isSpecial = true;
+            }
+
+            // Check if card at this slot is invalid
+            bool isCardInvalid = index < cards.length && cards[index].isInvalid;
+            if (isCardInvalid) {
+              slotColor = Colors.redAccent;
+              icon = Icons.lock_outline;
+            }
 
             return Positioned(
-              left: (300 / 2 - 45) + offset,
+              left: (320 / 2 - 45) + offset,
               child: Transform.scale(
                 scale: 0.65,
                 child: Container(
                   width: 90,
                   height: 130,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: label.isNotEmpty
-                          ? Colors.amber.withValues(alpha: 0.2)
-                          : Colors.white.withValues(alpha: 0.05),
-                      width: 1,
+                      color: isSpecial
+                          ? slotColor.withValues(alpha: 0.4)
+                          : Colors.white.withValues(alpha: 0.1),
+                      width: 1.5,
                     ),
-                    color: Colors.black.withValues(alpha: 0.1),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        isSpecial
+                            ? slotColor.withValues(alpha: 0.15)
+                            : Colors.white.withValues(alpha: 0.05),
+                        Colors.black.withValues(alpha: 0.4),
+                      ],
+                    ),
+                    boxShadow: [
+                      if (isSpecial)
+                        BoxShadow(
+                          color: slotColor.withValues(alpha: 0.1),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                    ],
                   ),
-                  child: Center(
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        color: label == "x2" ? Colors.amber : Colors.white12,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                      ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Stack(
+                      children: [
+                        // Subtle inner glow
+                        if (isSpecial)
+                          Positioned(
+                            top: -20,
+                            right: -20,
+                            child: Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: slotColor.withValues(alpha: 0.1),
+                              ),
+                            ),
+                          ),
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                icon,
+                                size: 24,
+                                color: isSpecial
+                                    ? slotColor.withValues(alpha: 0.5)
+                                    : Colors.white.withValues(alpha: 0.05),
+                              ),
+                              if (label.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                Text(
+                                  label,
+                                  style: TextStyle(
+                                    color: isSpecial
+                                        ? slotColor.withValues(alpha: 0.7)
+                                        : Colors.white24,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -177,28 +250,66 @@ class _CompactCardRow extends StatelessWidget {
             );
           }),
 
-          // Actual Cards
+          // Actual Cards with Premium Entrance Animation
           ...List.generate(cards.length, (index) {
             final offset = (index - (cards.length - 1) / 2) * spreadWidth;
-            // Center the cards over the placeholders if not spreading
             final centeredOffset = isSpread
                 ? offset
                 : (index - 2) * spreadWidth;
+            final card = cards[index];
+
+            bool isSlot2 = index == 2;
+            bool isSlot3 = index == 3;
 
             return AnimatedPositioned(
-              duration: const Duration(milliseconds: 600),
-              curve: Curves.easeOutBack,
-              left: (300 / 2 - 45) + (isSpread ? offset : centeredOffset),
-              child: AnimatedRotation(
-                duration: const Duration(milliseconds: 600),
-                turns: 0,
-                child: Transform.scale(
-                  scale: 0.65,
-                  child: Opacity(
-                    opacity: cards[index].value == 0 ? 0.4 : 1.0,
-                    child: PlayingCard(card: cards[index]),
-                  ),
-                ),
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.elasticOut, // Membuat kartu terasa "mendarat"
+              left: (320 / 2 - 45) + (isSpread ? offset : centeredOffset),
+              top: 0,
+              bottom: 0,
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0.0, end: 1.0),
+                duration: const Duration(milliseconds: 500),
+                builder: (context, value, child) {
+                  return Transform.translate(
+                    offset: Offset(0, 20 * (1 - value)), // Efek slide up
+                    child: Transform.scale(
+                      scale: 0.65 * (0.8 + (0.2 * value)), // Efek zoom in kecil
+                      child: Opacity(
+                        opacity: value,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              if (isSlot2 && !card.isInvalid)
+                                BoxShadow(
+                                  color: Colors.amber.withValues(alpha: 0.4),
+                                  blurRadius: 25,
+                                  spreadRadius: 2,
+                                ),
+                              if (isSlot3 && !card.isInvalid)
+                                BoxShadow(
+                                  color: Colors.blueAccent.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  blurRadius: 25,
+                                  spreadRadius: 2,
+                                ),
+                              if (card.isInvalid)
+                                BoxShadow(
+                                  color: Colors.redAccent.withValues(
+                                    alpha: 0.3,
+                                  ),
+                                  blurRadius: 20,
+                                  spreadRadius: 1,
+                                ),
+                            ],
+                          ),
+                          child: PlayingCard(card: card),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             );
           }),

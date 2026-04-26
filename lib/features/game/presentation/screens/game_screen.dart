@@ -207,6 +207,7 @@ class _GameMainLayout extends StatelessWidget {
           isTurn: !gameState.isPlayerTurn,
           accentColor: GameTheme.aiRed,
           avatarIcon: Icons.psychology,
+          timeLeft: !gameState.isPlayerTurn ? gameState.timeLeft : null,
         ),
         const SizedBox(height: 4),
         OpponentArea(key: aiHandKey, aiHand: gameState.aiHand),
@@ -232,7 +233,7 @@ class _GameMainLayout extends StatelessWidget {
           isTurn: gameState.isPlayerTurn,
           accentColor: GameTheme.playerBlue,
           avatarIcon: Icons.person,
-          timeLeft: gameState.timeLeft,
+          timeLeft: gameState.isPlayerTurn ? gameState.timeLeft : null,
         ),
         PlayerHand(
           key: handKey,
