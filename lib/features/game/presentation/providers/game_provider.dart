@@ -68,7 +68,7 @@ final gameRepositoryProvider = Provider<IGameRepository>((ref) {
     return LocalGameRepository();
   }
 
-  return OfflineFirstGameRepository(
+  final repo = OfflineFirstGameRepository(
     local: LocalGameRepository(),
     remote: FirebaseGameRepository(
       uid: user.uid,
@@ -77,6 +77,10 @@ final gameRepositoryProvider = Provider<IGameRepository>((ref) {
     ),
     connectivity: connectivity,
   );
+
+  ref.onDispose(() => repo.dispose());
+
+  return repo;
 });
 
 final getStatsUseCaseProvider = Provider((ref) {

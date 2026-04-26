@@ -35,29 +35,55 @@ class FirebaseGameRepository implements IGameRepository {
     required bool isWin,
     required PokerHandRank playerHand,
   }) async {
-    final current = await getStats();
+    await _firestore.runTransaction((transaction) async {
+      final snap = await transaction.get(_statsDoc);
+      final current = snap.exists
+          ? GameStats.fromFirestoreMap(snap.data() as Map<String, dynamic>)
+          : const GameStats();
 
-    final newHandCounts = Map<PokerHandRank, int>.from(current.handCounts);
-    newHandCounts[playerHand] = (newHandCounts[playerHand] ?? 0) + 1;
+      final newHandCounts = Map<PokerHandRank, int>.from(current.handCounts);
+      newHandCounts[playerHand] = (newHandCounts[playerHand] ?? 0) + 1;
 
-    final updated = GameStats(
-      highScore: score > current.highScore ? score : current.highScore,
-      totalGames: current.totalGames + 1,
-      totalWins: isWin ? current.totalWins + 1 : current.totalWins,
-      totalLosses: !isWin ? current.totalLosses + 1 : current.totalLosses,
-      handCounts: newHandCounts,
-      lastSyncAt: DateTime.now(),
-      needsSync: false,
-    );
+      final updated = GameStats(
+        highScore: score > current.highScore ? score : current.highScore,
+        totalGames: current.totalGames + 1,
+        totalWins: isWin ? current.totalWins + 1 : current.totalWins,
+        totalLosses: !isWin ? current.totalLosses + 1 : current.totalLosses,
+        handCounts: newHandCounts,
+        lastSyncAt: DateTime.now(),
+        needsSync: false,
+      );
 
-    await _statsDoc.set(updated.toFirestoreMap());
-    await _updateLeaderboard(updated);
+      transaction.set(_statsDoc, updated.toFirestoreMap());
+
+      final leaderboardData = {
+        'uid': uid,
+        'displayName': displayName,
+        'highScore': updated.highScore,
+        'totalGames': updated.totalGames,
+        'totalWins': updated.totalWins,
+        'totalLosses': updated.totalLosses,
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+
+      if (photoUrl != null) {
+        leaderboardData['photoUrl'] = photoUrl as Object;
+      }
+
+      transaction.set(
+        _leaderboardDoc,
+        leaderboardData,
+        SetOptions(merge: true),
+      );
+    });
   }
 
   @override
   Future<void> resetStats() async {
-    await _statsDoc.delete();
-    await _leaderboardDoc.delete();
+    final batch = _firestore.batch();
+    batch.delete(_statsDoc);
+    batch.delete(_leaderboardDoc);
+    await batch.commit();
   }
 
   Future<void> uploadStats(GameStats stats) async {
@@ -70,15 +96,20 @@ class FirebaseGameRepository implements IGameRepository {
   }
 
   Future<void> _updateLeaderboard(GameStats stats) async {
-    await _leaderboardDoc.set({
+    final data = {
       'uid': uid,
       'displayName': displayName,
-      'photoUrl': photoUrl,
       'highScore': stats.highScore,
       'totalGames': stats.totalGames,
       'totalWins': stats.totalWins,
       'totalLosses': stats.totalLosses,
       'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    };
+
+    if (photoUrl != null) {
+      data['photoUrl'] = photoUrl as Object;
+    }
+
+    await _leaderboardDoc.set(data, SetOptions(merge: true));
   }
 }

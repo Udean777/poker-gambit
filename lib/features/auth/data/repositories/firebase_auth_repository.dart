@@ -30,7 +30,8 @@ class FirebaseAuthRepository implements IAuthRepository {
 
     final googleUser = await GoogleSignIn.instance.authenticate();
 
-    final idToken = googleUser.authentication.idToken;
+    final authentication = googleUser.authentication;
+    final idToken = authentication.idToken;
     return GoogleAuthProvider.credential(idToken: idToken);
   }
 
@@ -56,17 +57,28 @@ class FirebaseAuthRepository implements IAuthRepository {
     final googleUser = await GoogleSignIn.instance.authenticate();
 
     AuthCredential buildCredential() {
-      final idToken = googleUser.authentication.idToken;
+      final authentication = googleUser.authentication;
+      final idToken = authentication.idToken;
       return GoogleAuthProvider.credential(idToken: idToken);
     }
 
     try {
-      final userCredential = await currentFirebaseUser
-          .linkWithCredential(buildCredential());
+      final userCredential = await currentFirebaseUser.linkWithCredential(
+        buildCredential(),
+      );
+      return _mapUser(userCredential.user)!;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'credential-already-in-use') {
+        rethrow;
+      }
+      final userCredential = await _firebaseAuth.signInWithCredential(
+        buildCredential(),
+      );
       return _mapUser(userCredential.user)!;
     } catch (_) {
-      final userCredential = await _firebaseAuth
-          .signInWithCredential(buildCredential());
+      final userCredential = await _firebaseAuth.signInWithCredential(
+        buildCredential(),
+      );
       return _mapUser(userCredential.user)!;
     }
   }
@@ -85,7 +97,7 @@ class FirebaseAuthRepository implements IAuthRepository {
       uid: user.uid,
       displayName: user.isAnonymous
           ? 'Guest'
-          : (user.displayName ?? user.email ?? 'Player'),
+          : (user.displayName ?? 'Player-${user.uid.substring(0, 6)}'),
       email: user.email,
       photoUrl: user.photoURL,
       isGuest: user.isAnonymous,

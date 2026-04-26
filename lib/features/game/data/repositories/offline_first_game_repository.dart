@@ -53,14 +53,25 @@ class OfflineFirstGameRepository implements IGameRepository {
   Future<void> resetStats() async {
     await _local.resetStats();
     final isOnline = await _connectivity.isOnline;
-    if (isOnline) await _remote.resetStats();
+    if (isOnline) {
+      await _remote.resetStats();
+      await _local.setPendingRemoteReset(false);
+    } else {
+      await _local.setPendingRemoteReset(true);
+    }
   }
 
   Future<void> _syncIfNeeded() async {
-    final localStats = await _local.getStats();
-    if (!localStats.needsSync) return;
-
     try {
+      final pendingReset = await _local.getPendingRemoteReset();
+      if (pendingReset) {
+        await _remote.resetStats();
+        await _local.setPendingRemoteReset(false);
+      }
+
+      final localStats = await _local.getStats();
+      if (!localStats.needsSync) return;
+
       final remoteStats = await _remote.getStats();
       final merged = localStats.mergeWith(remoteStats);
       await _remote.uploadStats(merged);

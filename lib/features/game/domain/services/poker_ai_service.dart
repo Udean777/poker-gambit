@@ -9,7 +9,7 @@ class PokerAiService implements IPokerAiService {
 
   PokerAiService({required this.apiKey}) {
     _model = GenerativeModel(
-      model: 'gemini-2.5-flash-preview-04-17',
+      model: 'gemini-2.5-flash',
       apiKey: apiKey,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
@@ -76,7 +76,9 @@ IMPORTANT: 'indices' must be an array of card indices (0-4) to discard. Maximum 
 
         return {'action': action, 'indices': indices, 'message': message};
       }
-    } catch (_) {}
+    } catch (e) {
+      rethrow;
+    }
 
     return {
       'action': 'swap',
@@ -143,7 +145,9 @@ Example: [2, 0, 3, 1, 4]
             .toList();
         if (indices.isNotEmpty) return indices;
       }
-    } catch (_) {}
+    } catch (e) {
+      rethrow;
+    }
 
     return List.generate(aiHand.length, (i) => aiHand.length - 1 - i);
   }

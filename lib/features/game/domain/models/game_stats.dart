@@ -46,16 +46,23 @@ class GameStats {
     for (final rank in PokerHandRank.values) {
       final a = handCounts[rank] ?? 0;
       final b = other.handCounts[rank] ?? 0;
-      mergedHandCounts[rank] = a > b ? a : b;
+      mergedHandCounts[rank] = a + b;
+    }
+
+    final newWins = totalWins + other.totalWins;
+    final newLosses = totalLosses + other.totalLosses;
+    var newTotalGames = totalGames + other.totalGames;
+
+    // Enforce invariant: totalGames >= totalWins + totalLosses
+    if (newTotalGames < newWins + newLosses) {
+      newTotalGames = newWins + newLosses;
     }
 
     return GameStats(
       highScore: highScore > other.highScore ? highScore : other.highScore,
-      totalGames: totalGames > other.totalGames ? totalGames : other.totalGames,
-      totalWins: totalWins > other.totalWins ? totalWins : other.totalWins,
-      totalLosses: totalLosses > other.totalLosses
-          ? totalLosses
-          : other.totalLosses,
+      totalGames: newTotalGames,
+      totalWins: newWins,
+      totalLosses: newLosses,
       handCounts: mergedHandCounts,
       lastSyncAt: DateTime.now(),
       needsSync: false,
@@ -81,18 +88,47 @@ class GameStats {
     final rawHandCounts = map['handCounts'] as Map<String, dynamic>? ?? {};
     final handCounts = <PokerHandRank, int>{};
     for (final rank in PokerHandRank.values) {
-      handCounts[rank] = (rawHandCounts[rank.name] as int?) ?? 0;
+      handCounts[rank] = (rawHandCounts[rank.name] as num? ?? 0).toInt();
     }
     return GameStats(
-      highScore: (map['highScore'] as int?) ?? 0,
-      totalGames: (map['totalGames'] as int?) ?? 0,
-      totalWins: (map['totalWins'] as int?) ?? 0,
-      totalLosses: (map['totalLosses'] as int?) ?? 0,
+      highScore: (map['highScore'] as num? ?? 0).toInt(),
+      totalGames: (map['totalGames'] as num? ?? 0).toInt(),
+      totalWins: (map['totalWins'] as num? ?? 0).toInt(),
+      totalLosses: (map['totalLosses'] as num? ?? 0).toInt(),
       handCounts: handCounts,
-      lastSyncAt: map['lastSyncAt'] != null
-          ? DateTime.tryParse(map['lastSyncAt'] as String)
-          : null,
+      lastSyncAt: _parseDateTime(map['lastSyncAt']),
       needsSync: false,
     );
+  }
+
+  static DateTime? _parseDateTime(dynamic value) {
+    if (value == null) return null;
+    if (value is DateTime) return value;
+    if (value is String) return DateTime.tryParse(value);
+
+    try {
+      if (value.runtimeType.toString() == 'Timestamp') {
+        return (value as dynamic).toDate();
+      }
+      final dynamic v = value;
+      if (v.seconds is int) {
+        final int seconds = v.seconds;
+        final int nanos = (v.nanoseconds as num? ?? 0).toInt();
+        return DateTime.fromMillisecondsSinceEpoch(
+          seconds * 1000 + (nanos ~/ 1000000),
+        );
+      }
+    } catch (_) {
+      if (value is Map) {
+        final seconds = value['seconds'] ?? value['_seconds'];
+        final nanos = value['nanoseconds'] ?? value['_nanoseconds'] ?? 0;
+        if (seconds is int) {
+          final int s = seconds;
+          final int n = (nanos as num).toInt();
+          return DateTime.fromMillisecondsSinceEpoch(s * 1000 + (n ~/ 1000000));
+        }
+      }
+    }
+    return DateTime.tryParse(value.toString());
   }
 }

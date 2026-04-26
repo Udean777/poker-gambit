@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:card_games/core/providers/connectivity_provider.dart';
 import 'package:card_games/core/theme/game_theme.dart';
@@ -163,6 +164,11 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         icon: Icons.exit_to_app,
         isQuit: true,
         onPressed: () {
+          if (kIsWeb) {
+            // On web, we can't easily exit the app, so we can either do nothing
+            // or show a message. For now, we'll just return.
+            return;
+          }
           if (Platform.isAndroid || Platform.isIOS) {
             SystemNavigator.pop();
           } else {

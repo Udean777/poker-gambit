@@ -10,6 +10,7 @@ class LocalGameRepository implements IGameRepository {
   static const _keyTotalLosses = 'stat_totalLosses';
   static const _keyNeedsSync = 'stat_needsSync';
   static const _keyLastSyncAt = 'stat_lastSyncAt';
+  static const _keyPendingRemoteReset = 'stat_pendingRemoteReset';
   static String _handKey(PokerHandRank rank) => 'stat_hand_${rank.name}';
 
   @override
@@ -79,5 +80,19 @@ class LocalGameRepository implements IGameRepository {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_keyNeedsSync, false);
     await prefs.setString(_keyLastSyncAt, syncedAt.toIso8601String());
+  }
+
+  Future<void> setPendingRemoteReset(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (value) {
+      await prefs.setBool(_keyPendingRemoteReset, true);
+    } else {
+      await prefs.remove(_keyPendingRemoteReset);
+    }
+  }
+
+  Future<bool> getPendingRemoteReset() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyPendingRemoteReset) ?? false;
   }
 }

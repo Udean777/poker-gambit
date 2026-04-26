@@ -22,9 +22,8 @@ class ProfileBottomSheet extends ConsumerStatefulWidget {
 
 class _ProfileBottomSheetState extends ConsumerState<ProfileBottomSheet> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    ref.listenManual(authStateProvider, (previous, next) {
+  Widget build(BuildContext context) {
+    ref.listen(authStateProvider, (previous, next) {
       final prevUser = previous?.valueOrNull;
       final nextUser = next.valueOrNull;
       if (prevUser?.isGuest == true && nextUser?.isGuest == false) {
@@ -32,10 +31,7 @@ class _ProfileBottomSheetState extends ConsumerState<ProfileBottomSheet> {
         if (mounted) Navigator.of(context).pop();
       }
     });
-  }
 
-  @override
-  Widget build(BuildContext context) {
     final authState = ref.watch(authNotifierProvider);
     final currentUser = ref.watch(authStateProvider).valueOrNull;
 
