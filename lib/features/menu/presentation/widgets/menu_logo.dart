@@ -9,29 +9,27 @@ class MenuLogo extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(20),
+          width: 120,
+          height: 120,
           decoration: BoxDecoration(
-            color: GameTheme.accentAmber.withValues(alpha: 0.1),
             shape: BoxShape.circle,
-            border: Border.all(
-              color: GameTheme.accentAmber.withValues(alpha: 0.3),
-              width: 2,
-            ),
             boxShadow: [
               BoxShadow(
-                color: GameTheme.accentAmber.withValues(alpha: 0.1),
-                blurRadius: 20,
+                color: GameTheme.accentAmber.withValues(alpha: 0.2),
+                blurRadius: 30,
                 spreadRadius: 5,
               ),
             ],
           ),
-          child: const Icon(
-            Icons.style,
-            size: 60,
-            color: GameTheme.accentAmber,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.asset(
+              'assets/images/poker-gambit.png',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 20),
         Text(
           'POKER GAMBIT',
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -47,7 +45,7 @@ class MenuLogo extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 10),
         Container(
           height: 3,
           width: 80,

@@ -36,10 +36,24 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   riverpod_generator: ^2.3.9
   build_runner: ^2.4.8
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/
     - assets/images/cards/
     - assets/audio/
     - .env
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/poker-gambit.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/poker-gambit.png"
+  macos:
+    generate: true
+    image_path: "assets/images/poker-gambit.png"

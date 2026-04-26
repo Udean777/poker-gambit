@@ -1,90 +1,97 @@
 # Poker Gambit 🃏
 
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
-![Riverpod](https://img.shields.io/badge/Riverpod-%232196F3.svg?style=for-the-badge&logo=flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
-![Flame](https://img.shields.io/badge/Flame-%23FF6B35.svg?style=for-the-badge&logo=flutter&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-%232196F3.svg?style=for-the-badge&logo=flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![Gemini](https://img.shields.io/badge/Google%20Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
 
-**Poker Gambit** adalah game kartu strategi berbasis Flutter yang menggabungkan mekanik poker klasik dengan elemen interaktif modern. Pemain bertarung melawan AI yang didukung Google Gemini, dengan sistem kartu spesial, QTE (Quick Time Event), dan timer giliran yang membuat setiap ronde terasa menegangkan. Tampilan menggunakan dark-mode premium dengan desain glassmorphic dan animasi yang halus.
+**Poker Gambit** adalah game kartu strategi berbasis Flutter yang menggabungkan mekanik poker klasik dengan elemen interaktif modern. Pemain bertarung melawan AI yang didukung Google Gemini, dilengkapi sistem autentikasi Firebase, leaderboard global, dan sinkronisasi data offline-first.
 
 ---
 
 ## ✨ Fitur Utama
 
-### 🚀 Pengalaman Bermain
-- **Onboarding Immersif**: Alur pengenalan yang memandu pemain baru.
-- **Main Menu Premium**: Desain glassmorphic elegan dengan beberapa pilihan mode permainan.
+### 🔐 Autentikasi & User
+- **Guest Mode**: Langsung bermain tanpa login, data tersimpan lokal.
+- **Google Sign-In**: Login dengan akun Google untuk akses fitur penuh.
+- **Upgrade Akun**: Guest bisa upgrade ke akun Google tanpa kehilangan data.
+- **Offline-First**: Data tersimpan lokal dan otomatis sync ke Firebase saat online.
 
-### 🎮 Mekanik Gameplay
+### 🎮 Gameplay
 - **VS AI Mode**: Tantang AI dengan pengambilan keputusan strategis berbasis Gemini.
-- **Kartu Spesial**: Tiga jenis efek kartu unik — Spy (intip kartu lawan), Witch (tukar kartu), dan Destroyer (hancurkan kartu).
-- **QTE (Quick Time Event)**: Sistem "Counter/Block" interaktif untuk gameplay berbasis skill.
+- **Kartu Spesial**: Tiga efek unik — Spy (intip kartu lawan), Witch (tukar kartu), Destroyer (hancurkan kartu).
+- **QTE (Quick Time Event)**: Sistem Counter/Block interaktif berbasis skill.
 - **Turn Timer**: Timer real-time yang menambah tekanan di setiap giliran.
-- **Fase Swap Kartu**: Pemain bisa menukar kartu sebelum showdown.
+- **Fase Swap Kartu**: Tukar kartu sebelum showdown.
 
-### 🎨 Visual & Audio
-- **Dark Mode Premium**: Desain kaya dengan aksen warna vibrant dan animasi smooth.
-- **Dynamic HUD**: Skor real-time, indikator giliran, dan pesan status interaktif.
-- **Animasi Kartu**: Animasi draw dan discard yang fluid.
-- **Sound Effects**: Audio feedback untuk setiap aksi dalam permainan.
+### 🏆 Statistik & Leaderboard
+- **Statistik Lengkap**: Tracking high score, total games, wins, losses, dan frekuensi tiap kombinasi kartu.
+- **Global Leaderboard**: Papan peringkat top 10 pemain di seluruh dunia.
+- **Sync Otomatis**: Data sinkronisasi ke Firestore saat kembali online.
+
+### 🎨 Visual & UX
+- **Dark Mode Premium**: Desain glassmorphic dengan aksen amber/gold.
+- **Animasi Fluid**: Animasi draw, discard, dan transisi yang halus.
+- **Onboarding**: Alur pengenalan untuk pemain baru (hanya tampil sekali).
+- **Responsive**: Mendukung Android, iOS, Web, dan macOS.
 
 ---
 
-## 🛠 Tech Stack & Library
+## 🛠 Tech Stack
 
-| Kategori | Library | Versi | Keterangan |
-|---|---|---|---|
-| Framework | [Flutter](https://flutter.dev) | latest stable | Cross-platform UI framework |
-| Language | [Dart](https://dart.dev) | ^3.11.4 | |
-| State Management | [flutter_riverpod](https://riverpod.dev) | ^2.5.1 | Reactive state management |
-| Code Generation | [riverpod_generator](https://pub.dev/packages/riverpod_generator) + [build_runner](https://pub.dev/packages/build_runner) | ^2.3.9 / ^2.4.8 | Generate Riverpod providers otomatis |
-| AI Opponent | [google_generative_ai](https://pub.dev/packages/google_generative_ai) | ^0.4.7 | Gemini API untuk logika AI |
-| Game Engine | [flame](https://flame-engine.org) | ^1.11.0 | Game loop & animasi |
-| SVG Assets | [flutter_svg](https://pub.dev/packages/flutter_svg) | ^2.0.10+1 | Render kartu vektor resolusi independen |
-| Typography | [google_fonts](https://pub.dev/packages/google_fonts) | ^6.1.0 | Font Outfit untuk UI game |
-| Audio | [audioplayers](https://pub.dev/packages/audioplayers) | ^5.2.1 | Sound effects |
-| Environment | [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) | ^6.0.1 | Manajemen API key via `.env` |
-| Persistensi | [shared_preferences](https://pub.dev/packages/shared_preferences) | ^2.5.5 | Simpan high score lokal |
-| Testing | [mocktail](https://pub.dev/packages/mocktail) + [fake_async](https://pub.dev/packages/fake_async) | ^1.0.4 / ^1.3.1 | Unit & widget testing |
+| Kategori | Library | Keterangan |
+|---|---|---|
+| Framework | [Flutter](https://flutter.dev) `latest` | Cross-platform UI |
+| Language | [Dart](https://dart.dev) `^3.11.4` | |
+| State Management | [flutter_riverpod](https://riverpod.dev) `^2.5.1` | Reactive state management |
+| Auth | [firebase_auth](https://pub.dev/packages/firebase_auth) `^5.x` | Google Sign-In + Anonymous |
+| Database | [cloud_firestore](https://pub.dev/packages/cloud_firestore) `^5.x` | Leaderboard & user stats |
+| AI Opponent | [google_generative_ai](https://pub.dev/packages/google_generative_ai) `^0.4.7` | Gemini 2.5 Flash |
+| Connectivity | [connectivity_plus](https://pub.dev/packages/connectivity_plus) `^6.x` | Offline-first sync |
+| Local Storage | [shared_preferences](https://pub.dev/packages/shared_preferences) `^2.5.5` | Cache lokal |
+| Typography | [google_fonts](https://pub.dev/packages/google_fonts) `^6.1.0` | Font Outfit |
+| Audio | [audioplayers](https://pub.dev/packages/audioplayers) `^5.2.1` | Sound effects |
+| SVG | [flutter_svg](https://pub.dev/packages/flutter_svg) `^2.0.10` | Kartu vektor |
+| Environment | [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) `^6.0.1` | API key management |
+| Code Gen | [riverpod_generator](https://pub.dev/packages/riverpod_generator) + [build_runner](https://pub.dev/packages/build_runner) | Generate providers |
+| Testing | [mocktail](https://pub.dev/packages/mocktail) + [fake_async](https://pub.dev/packages/fake_async) | Unit testing |
 
 ---
 
 ## 🏗 Arsitektur
 
-Project mengikuti prinsip **Clean Architecture** dengan pemisahan layer yang jelas, memastikan skalabilitas dan kemudahan maintenance.
+Project mengikuti **Clean Architecture** + **SOLID Principles** dengan pemisahan layer yang ketat.
 
 ```
 lib/
 ├── core/
-│   ├── constants/       # Konstanta game (GameConstants)
-│   ├── theme/           # Design system & tema (GameTheme)
-│   └── utils/           # Utility functions (CardUtils, TimeUtils)
+│   ├── config/          # AppConfig, AppInitializer
+│   ├── constants/       # GameConstants
+│   ├── providers/       # ConnectivityProvider
+│   ├── services/        # ConnectivityService
+│   ├── theme/           # GameTheme
+│   ├── utils/           # CardUtils, TimeUtils
+│   └── widgets/         # AppScaffold, SplashScreen, AutoGuestSignIn
 │
 ├── features/
+│   ├── auth/
+│   │   ├── data/        # FirebaseAuthRepository
+│   │   ├── domain/      # AppUser, IAuthRepository, UseCases
+│   │   └── presentation/ # AuthProvider, AuthNotifier, ProfileBottomSheet
+│   │
 │   ├── game/
-│   │   ├── data/
-│   │   │   └── repositories/    # Implementasi repository (LocalGameRepository)
-│   │   │
-│   │   ├── domain/
-│   │   │   ├── logic/
-│   │   │   │   ├── card_effects/ # Efek kartu spesial (Spy, Witch, Destroyer)
-│   │   │   │   └── poker_evaluator.dart  # Evaluasi hand poker
-│   │   │   ├── models/          # CardModel, GameState, PokerHand
-│   │   │   ├── repositories/    # Interface repository
-│   │   │   ├── services/        # DeckService, PokerAiService (Gemini)
-│   │   │   └── usecases/        # StartGame, PlayCard, SwapCards, EvaluateRound, dll.
-│   │   │
-│   │   └── presentation/
-│   │       ├── controllers/     # SwapAnimationOrchestrator
-│   │       ├── providers/       # GameNotifier (Riverpod) + GameTimerMixin
-│   │       ├── screens/         # GameScreen
-│   │       └── widgets/         # PokerTable, PlayerHand, OpponentArea, animasi, dll.
+│   │   ├── data/        # LocalRepo, FirebaseRepo, OfflineFirstRepo
+│   │   ├── domain/      # Models, Logic, Services, UseCases
+│   │   └── presentation/ # GameNotifier, GameScreen, Widgets
+│   │
+│   ├── leaderboard/
+│   │   ├── data/        # FirebaseLeaderboardRepository
+│   │   ├── domain/      # LeaderboardEntry, ILeaderboardRepository
+│   │   └── presentation/ # LeaderboardProvider, LeaderboardScreen
 │   │
 │   └── menu/
-│       └── presentation/
-│           ├── screens/         # OnboardingScreen, MainMenuScreen
-│           └── widgets/         # RulesDialog
+│       └── presentation/ # OnboardingScreen, MainMenuScreen, Widgets
 │
 └── main.dart
 ```
@@ -92,13 +99,20 @@ lib/
 ### Alur Data
 
 ```
-UI (Widget) → Provider (Riverpod) → UseCase → Repository / Service → Domain Model
+UI → Provider (Riverpod) → UseCase → Repository → Domain Model
+                                   ↓
+                          Local (SharedPrefs) ←→ Remote (Firestore)
 ```
 
-- **Domain layer** murni Dart, tidak bergantung pada Flutter.
-- **UseCase** mengenkapsulasi satu operasi bisnis (single responsibility).
-- **Riverpod** sebagai jembatan antara domain dan UI, dengan `GameNotifier` sebagai pusat state game.
-- **AI Service** memanggil Gemini API untuk menentukan aksi lawan secara dinamis.
+### Offline-First Strategy
+
+```
+saveGameResult()
+  → simpan ke SharedPreferences (selalu)
+  → jika online → sync ke Firestore
+  → jika offline → set needsSync = true
+  → saat kembali online → auto sync dengan conflict resolution "best wins"
+```
 
 ---
 
@@ -107,9 +121,10 @@ UI (Widget) → Provider (Riverpod) → UseCase → Repository / Service → Dom
 ### Prerequisites
 
 - Flutter SDK (latest stable)
-- Dart SDK ^3.11.4
+- Dart SDK `^3.11.4`
 - Android Studio / VS Code
 - Google Gemini API Key
+- Firebase project (dengan Auth & Firestore diaktifkan)
 
 ### Installation
 
@@ -131,14 +146,14 @@ UI (Widget) → Provider (Riverpod) → UseCase → Repository / Service → Dom
    Buat file `.env` di root directory:
 
    ```env
-   API_KEY=your_google_gemini_api_key
+   GEMINI_API_KEY=your_google_gemini_api_key
    ```
 
-4. **Generate Code** (Riverpod)
+4. **Firebase Setup**
 
-   ```bash
-   flutter pub run build_runner build
-   ```
+   - Tambah `google-services.json` ke `android/app/`
+   - Tambah `GoogleService-Info.plist` ke `ios/Runner/` dan `macos/Runner/`
+   - Update Firebase web config di `web/index.html`
 
 5. **Run the App**
 
@@ -157,10 +172,14 @@ UI (Widget) → Provider (Riverpod) → UseCase → Repository / Service → Dom
 ## 📅 Roadmap
 
 - [x] Onboarding Flow
-- [x] Main Menu Implementation
-- [x] VS AI Core Mechanics (Gemini)
+- [x] Main Menu
+- [x] VS AI (Gemini 2.5 Flash)
 - [x] Kartu Spesial (Spy, Witch, Destroyer)
 - [x] QTE System
+- [x] Firebase Auth (Google + Anonymous)
+- [x] Offline-First Data Sync
+- [x] Global Leaderboard
+- [x] Statistik Lengkap
 - [ ] VS Player (Local)
 - [ ] Online Multiplayer
 - [ ] Tournament Mode
@@ -170,7 +189,3 @@ UI (Widget) → Provider (Riverpod) → UseCase → Repository / Service → Dom
 ## 👤 Author
 
 **ssajudn** ft. **Antigravity**
-
----
-
-Made by ssajudn ft. Antigravity.
