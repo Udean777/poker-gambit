@@ -5,10 +5,8 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = card_games
+PRODUCT_NAME = Poker Gambit
 
-// The application's bundle identifier
 PRODUCT_BUNDLE_IDENTIFIER = com.ssajud.cardgames.cardGames
 
-// The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.ssajud.card_games. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 ssajudn. All rights reserved.

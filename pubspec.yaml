@@ -1,7 +1,7 @@
 name: card_games
-description: "A strategic poker card game called Poker Gambit."
+description: "Poker Gambit - A high-stakes strategic card game with AI opponent."
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.11.4

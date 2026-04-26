@@ -61,37 +61,39 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       decoration: GameTheme.tableGradient,
       body: Stack(
         children: [
-          _buildDecorativeBackground(),
           FadeTransition(
             opacity: _fadeAnimation,
             child: SlideTransition(
               position: _slideAnimation,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const MenuLogo(),
-                      const SizedBox(height: 60),
-                      if (isGuest) ...[
-                        LoginBanner(
-                          onTap: () => ProfileBottomSheet.show(context),
-                          isLoading: authAsync.isLoading,
-                        ),
-                        const SizedBox(height: 32),
-                      ],
-                      ..._buildMenuButtons(context, isOnline),
-                      const SizedBox(height: 60),
-                      Text(
-                        'v1.0.0',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.3),
-                          fontSize: 12,
-                          letterSpacing: 2,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 56, 24, 32),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const MenuLogo(),
+                            const SizedBox(height: 24),
+                            if (isGuest) ...[
+                              LoginBanner(
+                                onTap: () => ProfileBottomSheet.show(context),
+                                isLoading: authAsync.isLoading,
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                            const Spacer(),
+                            ..._buildMenuButtons(context, isOnline),
+                            const Spacer(),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -118,22 +120,8 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
     );
   }
 
-  Widget _buildDecorativeBackground() {
-    return Positioned(
-      top: -100,
-      right: -50,
-      child: Opacity(
-        opacity: 0.1,
-        child: Icon(
-          Icons.auto_awesome,
-          size: 300,
-          color: GameTheme.accentAmber.withValues(alpha: 0.5),
-        ),
-      ),
-    );
-  }
-
   List<Widget> _buildMenuButtons(BuildContext context, bool isOnline) {
+    const gap = SizedBox(height: 12);
     return [
       MenuButton(
         label: 'VS AI',
@@ -143,14 +131,14 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
           MaterialPageRoute(builder: (_) => const GameScreen()),
         ),
       ),
-      const SizedBox(height: 20),
+      gap,
       MenuButton(
         label: 'VS PLAYER',
         icon: Icons.person,
         isLocked: true,
         onPressed: () => _showComingSoon(context),
       ),
-      const SizedBox(height: 20),
+      gap,
       MenuButton(
         label: 'LEADERBOARD',
         icon: Icons.emoji_events,
@@ -162,14 +150,14 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
                 MaterialPageRoute(builder: (_) => const LeaderboardScreen()),
               ),
       ),
-      const SizedBox(height: 20),
+      gap,
       MenuButton(
         label: 'MULTIPLAYER',
         icon: Icons.groups,
         isLocked: true,
         onPressed: () => _showComingSoon(context),
       ),
-      const SizedBox(height: 20),
+      const SizedBox(height: 24),
       MenuButton(
         label: 'QUIT GAME',
         icon: Icons.exit_to_app,
