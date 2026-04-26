@@ -85,7 +85,7 @@ lib/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/Udean777/poker-gambit.git
+   git clone https://github.com/Udean777/poker-gambit
    cd card_games
    ```
 
