@@ -85,8 +85,8 @@ lib/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/Udean777/poker-gambit
-   cd card_games
+   git clone https://github.com/Udean777/poker-gambit.git
+   cd poker-gambit
    ```
 
 2. **Install dependencies**
