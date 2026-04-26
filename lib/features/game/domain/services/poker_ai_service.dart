@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:card_games/features/game/domain/models/card_model.dart';
 import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class PokerAiService implements IPokerAiService {
@@ -10,7 +9,7 @@ class PokerAiService implements IPokerAiService {
 
   PokerAiService({required this.apiKey}) {
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash-preview-04-17',
       apiKey: apiKey,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );
@@ -77,11 +76,8 @@ IMPORTANT: 'indices' must be an array of card indices (0-4) to discard. Maximum 
 
         return {'action': action, 'indices': indices, 'message': message};
       }
-    } catch (e) {
-      debugPrint("Gemini Error (decideDiscard): $e");
-    }
+    } catch (_) {}
 
-    // Fallback: jika API gagal, AI akan swap kartu pertama (agresif)
     return {
       'action': 'swap',
       'indices': [0, 1],
@@ -147,11 +143,8 @@ Example: [2, 0, 3, 1, 4]
             .toList();
         if (indices.isNotEmpty) return indices;
       }
-    } catch (e) {
-      debugPrint("Gemini Error (decidePlayOrder): $e");
-    }
+    } catch (_) {}
 
-    // Fallback: urutan terbalik (mainkan kartu lemah dulu)
     return List.generate(aiHand.length, (i) => aiHand.length - 1 - i);
   }
 }

@@ -1,9 +1,18 @@
 import 'package:card_games/core/theme/game_theme.dart';
+import 'package:card_games/core/widgets/app_scaffold.dart';
 import 'package:card_games/features/menu/presentation/screens/main_menu_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
+  static const _keyOnboardingSeen = 'onboarding_seen';
+
+  static Future<bool> hasSeenOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyOnboardingSeen) ?? false;
+  }
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -36,12 +45,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: GameTheme.tableGradient,
-        child: SafeArea(
-          child: Column(
+    return AppScaffold(
+      decoration: GameTheme.tableGradient,
+      body: Column(
             children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8, right: 16),
+                  child: TextButton(
+                    onPressed: _markSeenAndNavigate,
+                    child: Text(
+                      'Skip',
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
@@ -71,19 +94,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_currentPage < _items.length - 1) {
                           _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
                         } else {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainMenuScreen(),
-                            ),
-                          );
+                          await _markSeenAndNavigate();
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -111,9 +129,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
+        );
+  }
+
+  Future<void> _markSeenAndNavigate() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(OnboardingScreen._keyOnboardingSeen, true);
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainMenuScreen()),
+      );
+    }
   }
 
   Widget _buildPage(OnboardingItem item) {

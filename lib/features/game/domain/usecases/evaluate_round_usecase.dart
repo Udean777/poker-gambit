@@ -13,12 +13,15 @@ class EvaluateRoundUseCase {
     int newPlayerScore = currentState.playerScore;
     int newAiScore = currentState.aiScore;
     final String resultMessage;
+    bool? roundPlayerWon;
 
     if (playerResult.rank.power > aiResult.rank.power) {
       newPlayerScore++;
+      roundPlayerWon = true;
       resultMessage = 'MENANG! ${playerResult.rank.label}';
     } else if (aiResult.rank.power > playerResult.rank.power) {
       newAiScore++;
+      roundPlayerWon = false;
       resultMessage = 'KALAH! AI punya ${aiResult.rank.label}';
     } else {
       int winner = 0;
@@ -38,9 +41,11 @@ class EvaluateRoundUseCase {
 
       if (winner == 1) {
         newPlayerScore++;
+        roundPlayerWon = true;
         resultMessage = 'MENANG! ${playerResult.rank.label}';
       } else if (winner == -1) {
         newAiScore++;
+        roundPlayerWon = false;
         resultMessage = 'KALAH! AI punya ${aiResult.rank.label}';
       } else {
         resultMessage = 'SERI! Keduanya ${playerResult.rank.label}';
@@ -51,6 +56,8 @@ class EvaluateRoundUseCase {
       playerScore: newPlayerScore,
       aiScore: newAiScore,
       message: resultMessage,
+      lastRoundPlayerWon: roundPlayerWon,
+      lastPlayerHandRank: playerResult.rank,
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:card_games/core/constants/game_constants.dart';
 import 'package:card_games/core/utils/card_utils.dart';
-import 'package:card_games/features/game/domain/logic/i_poker_evaluator.dart';
 import 'package:card_games/features/game/domain/models/card_model.dart';
 import 'package:card_games/features/game/domain/models/game_state.dart';
 import 'package:card_games/features/game/domain/services/i_deck_service.dart';
@@ -9,9 +8,9 @@ import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart
 import 'package:card_games/features/game/domain/usecases/apply_card_effect_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/evaluate_round_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/execute_ai_turn_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/get_high_score_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/get_stats_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/play_card_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/save_high_score_usecase.dart';
+import 'package:card_games/features/game/domain/usecases/save_game_result_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/start_new_game_usecase.dart';
 import 'package:card_games/features/game/domain/usecases/swap_cards_usecase.dart';
 import 'package:card_games/features/game/presentation/providers/mixins/game_timer_mixin.dart';
@@ -24,8 +23,8 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
   final EvaluateRoundUseCase _evaluateRoundUseCase;
   final ExecuteAiTurnUseCase _executeAiTurnUseCase;
   final ApplyCardEffectUseCase _applyCardEffectUseCase;
-  final GetHighScoreUseCase _getHighScoreUseCase;
-  final SaveHighScoreUseCase _saveHighScoreUseCase;
+  final GetStatsUseCase _getStatsUseCase;
+  final SaveGameResultUseCase _saveGameResultUseCase;
   final IPokerAiService _aiService;
   final IDeckService _deckService;
 
@@ -36,28 +35,27 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
     required EvaluateRoundUseCase evaluateRoundUseCase,
     required ExecuteAiTurnUseCase executeAiTurnUseCase,
     required ApplyCardEffectUseCase applyCardEffectUseCase,
-    required GetHighScoreUseCase getHighScoreUseCase,
-    required SaveHighScoreUseCase saveHighScoreUseCase,
+    required GetStatsUseCase getStatsUseCase,
+    required SaveGameResultUseCase saveGameResultUseCase,
     required IPokerAiService aiService,
     required IDeckService deckService,
-    required IPokerEvaluator evaluator,
-  }) : _startNewGameUseCase = startNewGameUseCase,
-       _swapCardsUseCase = swapCardsUseCase,
-       _playCardUseCase = playCardUseCase,
-       _evaluateRoundUseCase = evaluateRoundUseCase,
-       _executeAiTurnUseCase = executeAiTurnUseCase,
-       _applyCardEffectUseCase = applyCardEffectUseCase,
-       _getHighScoreUseCase = getHighScoreUseCase,
-       _saveHighScoreUseCase = saveHighScoreUseCase,
-       _aiService = aiService,
-       _deckService = deckService,
-       super(const GameState(deck: [], playerHand: [], aiHand: [])) {
+  })  : _startNewGameUseCase = startNewGameUseCase,
+        _swapCardsUseCase = swapCardsUseCase,
+        _playCardUseCase = playCardUseCase,
+        _evaluateRoundUseCase = evaluateRoundUseCase,
+        _executeAiTurnUseCase = executeAiTurnUseCase,
+        _applyCardEffectUseCase = applyCardEffectUseCase,
+        _getStatsUseCase = getStatsUseCase,
+        _saveGameResultUseCase = saveGameResultUseCase,
+        _aiService = aiService,
+        _deckService = deckService,
+        super(const GameState(deck: [], playerHand: [], aiHand: [])) {
     _init();
   }
 
   Future<void> _init() async {
-    final highScore = await _getHighScoreUseCase.execute();
-    state = _startNewGameUseCase.execute(highScore: highScore);
+    final stats = await _getStatsUseCase();
+    state = _startNewGameUseCase.execute(highScore: stats.highScore);
     startTurnTimer();
   }
 
@@ -278,7 +276,6 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
         isPlayer: isPlayer,
       );
 
-      // Orchestrate temporary reveal for Spy effect (J card)
       if (card.valueLabel == 'J') {
         await Future.delayed(GameConstants.spyRevealDuration);
         if (mounted) {
@@ -299,10 +296,19 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
       await Future.delayed(GameConstants.pauseCheckDelay);
     }
     state = _evaluateRoundUseCase.execute(state);
-    if (state.playerScore > state.highScore) {
-      state = state.copyWith(highScore: state.playerScore);
-      await _saveHighScoreUseCase.execute(state.playerScore);
+
+    if (state.lastPlayerHandRank != null) {
+      final isWin = state.lastRoundPlayerWon ?? false;
+      if (state.playerScore > state.highScore) {
+        state = state.copyWith(highScore: state.playerScore);
+      }
+      await _saveGameResultUseCase(
+        score: state.playerScore,
+        isWin: isWin,
+        playerHand: state.lastPlayerHandRank!,
+      );
     }
+
     Future.delayed(GameConstants.nextRoundDelay, _startNextRound);
   }
 

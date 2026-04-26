@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "740482939505",
+    "project_id": "poker-gambit",
+    "storage_bucket": "poker-gambit.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740482939505:android:4b237754c9ee13a2a179d0",
+        "android_client_info": {
+          "package_name": "com.ssajud.card_games.card_games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740482939505-rde837sgpnpjgmjdg6q58ovocsdorq21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssajud.card_games.card_games",
+            "certificate_hash": "54cb9a7cd0f634e05a4df2c31233ce52d6426a0c"
+          }
+        },
+        {
+          "client_id": "740482939505-k9k3sfh3brm36ae4c1qs3qe8o5d99or5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA76zMvbPKkqzNmGUNho-ta4tvRH6-FJ-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740482939505-k9k3sfh3brm36ae4c1qs3qe8o5d99or5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "740482939505-100nqphhn4bnqdum6no74hf4ii5mp8k0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ssajud.cardgames.cardGames"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

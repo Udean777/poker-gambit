@@ -1,4 +1,5 @@
 import 'package:card_games/features/game/domain/models/card_model.dart';
+import 'package:card_games/features/game/domain/models/poker_hand.dart';
 import 'package:flutter/foundation.dart';
 
 enum GamePhase { drawing, playing, showdown, gameOver }
@@ -25,6 +26,8 @@ class GameState {
   final bool isPaused;
   final bool qteActive;
   final int highScore;
+  final bool? lastRoundPlayerWon;
+  final PokerHandRank? lastPlayerHandRank;
 
   const GameState({
     required this.deck,
@@ -47,6 +50,8 @@ class GameState {
     this.isPaused = false,
     this.qteActive = false,
     this.highScore = 0,
+    this.lastRoundPlayerWon,
+    this.lastPlayerHandRank,
   });
 
   int get totalTableCards => playerTableCards.length + aiTableCards.length;
@@ -73,6 +78,8 @@ class GameState {
     bool? isPaused,
     bool? qteActive,
     int? highScore,
+    bool? lastRoundPlayerWon,
+    PokerHandRank? lastPlayerHandRank,
   }) {
     return GameState(
       deck: deck ?? this.deck,
@@ -95,6 +102,8 @@ class GameState {
       isPaused: isPaused ?? this.isPaused,
       qteActive: qteActive ?? this.qteActive,
       highScore: highScore ?? this.highScore,
+      lastRoundPlayerWon: lastRoundPlayerWon ?? this.lastRoundPlayerWon,
+      lastPlayerHandRank: lastPlayerHandRank ?? this.lastPlayerHandRank,
     );
   }
 
@@ -122,7 +131,9 @@ class GameState {
           timeLeft == other.timeLeft &&
           isPaused == other.isPaused &&
           qteActive == other.qteActive &&
-          highScore == other.highScore;
+          highScore == other.highScore &&
+          lastRoundPlayerWon == other.lastRoundPlayerWon &&
+          lastPlayerHandRank == other.lastPlayerHandRank;
 
   @override
   int get hashCode =>
@@ -145,5 +156,7 @@ class GameState {
       timeLeft.hashCode ^
       isPaused.hashCode ^
       qteActive.hashCode ^
-      highScore.hashCode;
+      highScore.hashCode ^
+      lastRoundPlayerWon.hashCode ^
+      lastPlayerHandRank.hashCode;
 }
