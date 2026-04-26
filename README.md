@@ -1,55 +1,74 @@
 # Poker Gambit 🃏
 
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
-![Riverpod](https://img.shields.io/badge/Riverpod-%232196F3.svg?style=for-the-badge&logo=flutter&logoColor=white)
 ![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-%232196F3.svg?style=for-the-badge&logo=flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-**Poker Gambit** is a high-stakes, strategic card game built with Flutter. It combines classic card game mechanics with modern interactive elements, featuring a premium dark-themed UI and an advanced AI opponent.
+**Poker Gambit** adalah game kartu strategi berbasis Flutter yang menggabungkan mekanik poker klasik dengan elemen interaktif modern. Pemain bertarung melawan AI yang memiliki logika strategi lokal, dilengkapi sistem autentikasi Firebase, leaderboard global, dan sinkronisasi data offline-first.
 
 ---
 
-## ✨ Features
+## ✨ Fitur Utama
 
-### 🚀 Seamless Experience
+### 🔐 Autentikasi & User
 
-- **Immersive Onboarding**: A beautiful introductory flow to get players started.
-- **Premium Main Menu**: An elegant, glassmorphic menu design with multiple game modes.
+- **Guest Mode**: Langsung bermain tanpa login, data tersimpan lokal.
+- **Google Sign-In**: Login dengan akun Google untuk akses fitur penuh.
+- **Upgrade Akun**: Guest bisa upgrade ke akun Google tanpa kehilangan data.
+- **Offline-First**: Data tersimpan lokal dan otomatis sync ke Firebase saat online.
 
-### 🎮 Gameplay Mechanics
+### 🎮 Gameplay
 
-- **VS AI Mode**: Challenge a sophisticated AI with strategic decision-making.
-- **QTE (Quick Time Event)**: Interactive "Counter/Block" system for dynamic skill-based gameplay.
-- **High-Stakes Poker Elements**: Real-time turn timers and strategic card swapping phases.
+- **VS AI Mode**: Tantang AI dengan pengambilan keputusan strategis lokal (tanpa API/Limit).
+- **Mekanik x2 & Suit Lock**: Slot meja khusus yang memberikan pengganda poin dan tantangan kecocokan kartu.
+- **Kartu Spesial**: Tiga efek unik — Spy (intip kartu lawan), Witch (tukar kartu), Destroyer (hancurkan kartu).
+- **QTE (Quick Time Event)**: Sistem Counter/Block interaktif berbasis skill.
+- **Fase Swap Kartu**: Tukar kartu sebelum showdown dengan animasi premium.
 
-### 🎨 Visual & Audio
+### 🏆 Statistik & Leaderboard
 
-- **Modern Aesthetics**: Rich dark-mode design with vibrant accents and smooth animations.
-- **Dynamic HUD**: Real-time score tracking, turn indicators, and interactive status messages.
-- **Responsive Layout**: Optimized for various screen sizes using a custom design system.
+- **Statistik Lengkap**: Tracking high score, total games, wins, losses, dan frekuensi tiap kombinasi kartu.
+- **Global Leaderboard**: Papan peringkat top 10 pemain di seluruh dunia.
+- **Sync Otomatis**: Data sinkronisasi ke Firestore saat kembali online.
+
+### 🎨 Visual & UX
+
+- **Premium Dark Aesthetics**: Desain glassmorphic dengan aksen neon gold dan blue.
+- **Animasi Imersif**: Animasi draw, discard, dan transisi kartu yang sangat halus dan responsif.
+- **Onboarding**: Alur pengenalan untuk pemain baru.
+- **Responsive**: Mendukung Android, iOS, Web, dan macOS.
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Framework**: [Flutter](https://flutter.dev)
-- **State Management**: [Riverpod](https://riverpod.dev) (Generator & Annotations)
-- **AI Integration**: [Google Generative AI](https://pub.dev/packages/google_generative_ai)
-- **Game Engine**: [Flame](https://flame-engine.org) (Core loop & Animations)
-- **Typography**: Google Fonts (Outfit)
-- **Asset Management**: SVG for resolution-independent card assets.
+| Kategori         | Library                                                           | Keterangan                 |
+| ---------------- | ----------------------------------------------------------------- | -------------------------- |
+| Framework        | [Flutter](https://flutter.dev) `latest`                           | Cross-platform UI          |
+| Language         | [Dart](https://dart.dev)                                          |                            |
+| State Management | [flutter_riverpod](https://riverpod.dev)                          | Reactive state management  |
+| Auth             | [firebase_auth](https://pub.dev/packages/firebase_auth)           | Google Sign-In + Anonymous |
+| Database         | [cloud_firestore](https://pub.dev/packages/cloud_firestore)       | Leaderboard & user stats   |
+| Local Storage    | [shared_preferences](https://pub.dev/packages/shared_preferences) | Cache lokal                |
+| Typography       | [google_fonts](https://pub.dev/packages/google_fonts)             | Font Outfit                |
+| Audio            | [audioplayers](https://pub.dev/packages/audioplayers)             | Sound effects              |
 
 ---
 
-## 🏗 Architecture
+## 🏗 Arsitektur
 
-The project follows **Clean Architecture** principles to ensure scalability and maintainability:
+Project mengikuti **Clean Architecture** + **SOLID Principles**.
 
-```text
+```
 lib/
-├── core/           # Design system, themes, constants, and utilities
-├── data/           # Data sources and repository implementations
-├── domain/         # Business logic, models, and repository interfaces
-└── presentation/   # UI components, screens, and controllers (Riverpod)
+├── core/                # Config, Theme, Utils, Common Widgets
+├── features/
+│   ├── auth/            # Firebase Auth Layer
+│   ├── game/            # Gameplay, AI Logic, UI
+│   ├── leaderboard/     # Global Ranking
+│   └── menu/            # Navigation & UI
+└── main.dart
 ```
 
 ---
@@ -59,15 +78,14 @@ lib/
 ### Prerequisites
 
 - Flutter SDK (latest stable)
-- Dart SDK
-- Android Studio / VS Code
+- Firebase project (Auth & Firestore diaktifkan)
 
 ### Installation
 
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Udean777/poker-gambit.git
    cd card_games
    ```
 
@@ -77,32 +95,32 @@ lib/
    flutter pub get
    ```
 
-3. **Environment Setup**
-   Create a `.env` file in the root directory and add your API key (if applicable):
-
-   ```env
-   API_KEY=your_google_ai_api_key
-   ```
-
-4. **Generate Code** (for Riverpod)
-
-   ```bash
-   flutter pub run build_runner build
-   ```
-
-5. **Run the App**
+3. **Run the App**
    ```bash
    flutter run
    ```
 
 ---
 
+## 🎨 Asset Credits
+
+Game ini menggunakan aset kartu yang luar biasa dari:
+
+- **xCards Assets**: [Xadeck/xCards](https://github.com/Xadeck/xCards)
+
+---
+
 ## 📅 Roadmap
 
 - [x] Onboarding Flow
-- [x] Main Menu Implementation
-- [x] VS AI Core Mechanics
-- [ ] VS Player (Local)
+- [x] Main Menu
+- [x] Local Strategic AI Opponent
+- [x] Kartu Spesial (Spy, Witch, Destroyer)
+- [x] Mekanik Slot x2 & Suit Lock
+- [x] Firebase Auth (Google + Anonymous)
+- [x] Offline-First Data Sync
+- [x] Global Leaderboard
+- [x] Statistik Lengkap
 - [ ] Online Multiplayer
 - [ ] Tournament Mode
 
@@ -110,8 +128,4 @@ lib/
 
 ## 👤 Author
 
-**ssajudn** ft. **Antigravity**
-
----
-
-Made by ssajudn ft. Antigravity.
+**ssajudn** ft. **AI**

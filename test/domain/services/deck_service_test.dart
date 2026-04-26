@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:card_games/domain/services/deck_service.dart';
-import 'package:card_games/domain/models/card_model.dart';
+import 'package:card_games/features/game/domain/services/deck_service.dart';
+import 'package:card_games/features/game/domain/models/card_model.dart';
 import 'package:card_games/core/constants/game_constants.dart';
 
 void main() {

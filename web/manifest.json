@@ -1,11 +1,11 @@
 {
-    "name": "card_games",
-    "short_name": "card_games",
+    "name": "Poker Gambit",
+    "short_name": "Poker Gambit",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A Card games made by me.",
+    "background_color": "#051105",
+    "theme_color": "#1B5E20",
+    "description": "A high-stakes strategic card game with AI opponent. Challenge your skills in Poker Gambit.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

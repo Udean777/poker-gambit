@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_async/fake_async.dart';
-import 'package:card_games/domain/logic/card_effects/spy_effect.dart';
-import 'package:card_games/domain/logic/card_effects/witch_effect.dart';
-import 'package:card_games/domain/logic/card_effects/destroyer_effect.dart';
-import 'package:card_games/domain/models/card_model.dart';
-import 'package:card_games/domain/models/game_state.dart';
+import 'package:card_games/features/game/domain/logic/card_effects/spy_effect.dart';
+import 'package:card_games/features/game/domain/logic/card_effects/witch_effect.dart';
+import 'package:card_games/features/game/domain/logic/card_effects/destroyer_effect.dart';
+import 'package:card_games/features/game/domain/models/card_model.dart';
+import 'package:card_games/features/game/domain/models/game_state.dart';
 import 'package:card_games/core/constants/game_constants.dart';
 
 void main() {
