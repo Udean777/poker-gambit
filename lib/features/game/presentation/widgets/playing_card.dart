@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:card_games/features/game/domain/models/card_model.dart';
 import 'package:card_games/features/game/presentation/widgets/card_container.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PlayingCard extends StatelessWidget {
@@ -50,11 +51,21 @@ class PlayingCard extends StatelessWidget {
         child: CardContainer(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            child: Image.asset(
-              card.assetPath,
+            child: CachedNetworkImage(
+              imageUrl: card.remoteUrl,
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
+              fadeOutDuration: const Duration(milliseconds: 300),
+              fadeInDuration: const Duration(milliseconds: 500),
+              useOldImageOnUrlChange: true,
+              placeholder: (context, url) => Image.asset(
+                'assets/images/cards/card-back.png',
+                fit: BoxFit.cover,
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: Icon(Icons.error_outline, color: Colors.redAccent),
+              ),
             ),
           ),
         ),

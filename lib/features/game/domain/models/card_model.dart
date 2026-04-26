@@ -1,3 +1,4 @@
+import 'package:card_games/core/config/app_config.dart';
 import 'package:flutter/foundation.dart';
 
 enum CardSuit { heart, diamond, club, spade, joker }
@@ -16,53 +17,65 @@ class CardModel {
     this.isInvalid = false,
   });
 
+  String get _folder {
+    switch (suit) {
+      case CardSuit.heart:
+        return 'hearts';
+      case CardSuit.diamond:
+        return 'diamond';
+      case CardSuit.club:
+        return 'clubs';
+      case CardSuit.spade:
+        return 'spades';
+      case CardSuit.joker:
+        return '';
+    }
+  }
+
+  String get _suitChar {
+    switch (suit) {
+      case CardSuit.heart:
+        return 'H';
+      case CardSuit.diamond:
+        return 'D';
+      case CardSuit.club:
+        return 'C';
+      case CardSuit.spade:
+        return 'S';
+      case CardSuit.joker:
+        return '';
+    }
+  }
+
+  String get _valString {
+    if (value == 1) return "A";
+    if (value == 10) return "T";
+    if (value == 11) return "J";
+    if (value == 12) return "Q";
+    if (value == 13) return "K";
+    return value.toString();
+  }
+
   String get assetPath {
     if (suit == CardSuit.joker) {
       return 'assets/images/cards/joker@2x.png';
     }
-
-    String folder;
-    String suitChar;
-    switch (suit) {
-      case CardSuit.heart:
-        folder = 'hearts';
-        suitChar = 'H';
-        break;
-      case CardSuit.diamond:
-        folder = 'diamond';
-        suitChar = 'D';
-        break;
-      case CardSuit.club:
-        folder = 'clubs';
-        suitChar = 'C';
-        break;
-      case CardSuit.spade:
-        folder = 'spades';
-        suitChar = 'S';
-        break;
-      case CardSuit.joker:
-        return 'assets/images/cards/joker@2x.png';
-    }
-
-    String valString;
-    if (value == 1) {
-      valString = "A";
-    } else if (value == 10) {
-      valString = "T";
-    } else if (value == 11) {
-      valString = "J";
-    } else if (value == 12) {
-      valString = "Q";
-    } else if (value == 13) {
-      valString = "K";
-    } else {
-      valString = value.toString();
-    }
-
-    return 'assets/images/cards/$folder/$valString$suitChar@2x.png';
+    return 'assets/images/cards/$_folder/$_valString$_suitChar@2x.png';
   }
 
-  CardModel copyWith({int? value, CardSuit? suit, bool? isFaceUp, bool? isInvalid}) {
+  String get remoteUrl {
+    if (suit == CardSuit.joker) {
+      return '${AppConfig.assetBaseUrl}/joker@2x.png';
+    }
+    return '${AppConfig.assetBaseUrl}/$_folder/$_valString$_suitChar@2x.png';
+  }
+
+  CardModel copyWith({
+    int? value,
+    CardSuit? suit,
+    bool? isFaceUp,
+    bool? isInvalid,
+  }) {
     return CardModel(
       value: value ?? this.value,
       suit: suit ?? this.suit,
@@ -82,7 +95,8 @@ class CardModel {
           isInvalid == other.isInvalid;
 
   @override
-  int get hashCode => value.hashCode ^ suit.hashCode ^ isFaceUp.hashCode ^ isInvalid.hashCode;
+  int get hashCode =>
+      value.hashCode ^ suit.hashCode ^ isFaceUp.hashCode ^ isInvalid.hashCode;
 }
 
 extension CardDisplay on CardModel {

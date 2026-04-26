@@ -19,6 +19,7 @@ dependencies:
   google_fonts: ^6.1.0   # Tipografi game yang keren
   flutter_svg: ^2.0.10+1 # Untuk aset kartu vektor agar tidak pecah
   audioplayers: ^5.2.1   # Sound effects
+  cached_network_image: ^3.4.1
   google_generative_ai: ^0.4.7
   flutter_dotenv: ^6.0.1
   shared_preferences: ^2.5.5
@@ -43,10 +44,6 @@ flutter:
   assets:
     - assets/images/
     - assets/images/cards/
-    - assets/images/cards/diamond/
-    - assets/images/cards/hearts/
-    - assets/images/cards/clubs/
-    - assets/images/cards/spades/
     - assets/audio/
     - .env
 

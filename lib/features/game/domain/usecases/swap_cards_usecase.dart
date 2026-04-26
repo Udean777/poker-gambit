@@ -1,4 +1,3 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
 import 'package:card_games/features/game/domain/models/game_state.dart';
 import 'package:card_games/features/game/domain/services/i_deck_service.dart';
 

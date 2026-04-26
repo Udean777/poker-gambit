@@ -46,26 +46,23 @@ class PlayerInfo extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             name,
-            style: TextStyle(
-              color: isTurn ? Colors.white : Colors.white38,
-              fontSize: 11,
-              fontWeight: isTurn ? FontWeight.bold : FontWeight.normal,
-              letterSpacing: 1,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: isTurn ? Colors.white : Colors.white38,
+                  fontSize: 12,
+                  letterSpacing: 1,
+                ),
           ),
           if (isTurn) ...[
             const SizedBox(width: 6),
             if (timeLeft != null && timeLeft! > 0)
               Text(
                 TimeUtils.formatSeconds(timeLeft!),
-                style: TextStyle(
-                  color: timeLeft! <= 3
-                      ? Colors.redAccent
-                      : GameTheme.accentAmber,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1,
-                ),
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: timeLeft! <= 3
+                          ? Colors.redAccent
+                          : Colors.amber,
+                      fontSize: 14,
+                    ),
               )
             else
               Container(

@@ -1,4 +1,6 @@
+import 'package:card_games/core/config/app_config.dart';
 import 'package:card_games/features/game/presentation/widgets/card_container.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class DeckPile extends StatefulWidget {
@@ -78,9 +80,11 @@ class _DeckPileState extends State<DeckPile>
                       child: CardContainer(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset(
-                            'assets/images/cards/card-back.png',
+                          child: CachedNetworkImage(
+                            imageUrl: '${AppConfig.assetBaseUrl}/card-back.png',
                             fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(color: Colors.black26),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
                         ),
                       ),

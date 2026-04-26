@@ -49,10 +49,9 @@ class GameOverDialog extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               color: borderColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
+              fontSize: 28,
             ),
           ),
         ],
@@ -107,12 +106,11 @@ class GameOverDialog extends StatelessWidget {
                 Navigator.of(context).pop();
                 onRestart();
               },
-              label: const Text(
+              label: Text(
                 "MAIN LAGI",
-                style: TextStyle(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
             ),

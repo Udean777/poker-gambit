@@ -20,11 +20,11 @@ class RulesDialog extends StatelessWidget {
             size: 40,
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             "STRATEGI & ATURAN",
-            style: TextStyle(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
+              fontSize: 20,
               letterSpacing: 2,
             ),
           ),
@@ -39,7 +39,7 @@ class RulesDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildSectionTitle("🃏 DASAR PERMAINAN"),
+            _buildSectionTitle(context, "🃏 DASAR PERMAINAN"),
             _buildRuleItem(
               "Susun 5 kartu terbaik Anda di meja untuk melawan AI.",
             ),
@@ -48,7 +48,7 @@ class RulesDialog extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            _buildSectionTitle("⚡ ACTION CARDS (SKILL)"),
+            _buildSectionTitle(context, "⚡ ACTION CARDS (SKILL)"),
             _buildRuleItem(
               "J (Spy): Mengintip 1 kartu tangan lawan secara acak.",
             ),
@@ -60,7 +60,7 @@ class RulesDialog extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            _buildSectionTitle("🎰 MODIFIER SLOTS"),
+            _buildSectionTitle(context, "🎰 MODIFIER SLOTS"),
             _buildRuleItem(
               "Slot 3 (x2): Nilai kartu di posisi ini dikalikan 2!",
             ),
@@ -69,7 +69,7 @@ class RulesDialog extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-            _buildSectionTitle("🛡️ COUNTER & TIMER"),
+            _buildSectionTitle(context, "🛡️ COUNTER & TIMER"),
             _buildRuleItem(
               "Gunakan tombol COUNTER saat AI memakai skill untuk menggagalkannya!",
             ),
@@ -94,9 +94,12 @@ class RulesDialog extends StatelessWidget {
               elevation: 5,
             ),
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(
+            child: Text(
               "SAYA MENGERTI",
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.black,
+                fontSize: 18,
+              ),
             ),
           ),
         ),
@@ -104,15 +107,14 @@ class RulesDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
           color: GameTheme.accentAmber,
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
+          fontSize: 16,
         ),
       ),
     );

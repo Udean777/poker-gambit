@@ -117,11 +117,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         elevation: 8,
                       ),
                       child: Text(
-                        _currentPage == _items.length - 1 ? "Mulai" : "Lanjut",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                        _currentPage == _items.length - 1 ? "MULAI" : "LANJUT",
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Colors.black,
+                              fontSize: 18,
+                            ),
                       ),
                     ),
                   ],
@@ -164,11 +164,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 60),
           Text(
             item.title,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  color: Colors.white,
+                  letterSpacing: 2,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),

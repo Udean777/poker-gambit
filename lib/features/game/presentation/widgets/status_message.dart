@@ -48,15 +48,14 @@ class StatusMessage extends StatelessWidget {
         child: Text(
           message.toUpperCase(),
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            fontSize: 11,
-            letterSpacing: 2,
-            shadows: [
-              Shadow(color: Colors.black, blurRadius: 4, offset: Offset(1, 1)),
-            ],
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: Colors.white,
+                fontSize: 14,
+                letterSpacing: 2,
+                shadows: const [
+                  Shadow(color: Colors.black, blurRadius: 4, offset: Offset(1, 1)),
+                ],
+              ),
         ),
       ),
     );

@@ -15,11 +15,35 @@ class GameTheme {
   static const Color aiRed = Colors.redAccent;
 
   static ThemeData get darkTheme {
+    final baseTheme = ThemeData.dark();
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: backgroundDark,
-      textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme),
+      textTheme: GoogleFonts.montserratTextTheme(baseTheme.textTheme).copyWith(
+        displayLarge: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.displayLarge,
+        ),
+        displayMedium: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.displayMedium,
+        ),
+        displaySmall: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.displaySmall,
+        ),
+        headlineLarge: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.headlineLarge,
+        ),
+        headlineMedium: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.headlineMedium,
+        ),
+        headlineSmall: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.headlineSmall,
+        ),
+        titleLarge: GoogleFonts.bebasNeue(
+          textStyle: baseTheme.textTheme.titleLarge,
+          letterSpacing: 1.2,
+        ),
+      ),
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryGreen,
         brightness: Brightness.dark,

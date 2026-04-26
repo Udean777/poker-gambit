@@ -74,12 +74,10 @@ class MenuButton extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 2,
-                      color: baseColor.withValues(alpha: opacity),
-                    ),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontSize: 18,
+                          color: baseColor.withValues(alpha: opacity),
+                        ),
                   ),
                 ),
                 if (isLocked)

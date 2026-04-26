@@ -40,15 +40,15 @@ class DrawingOverlay extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (selectedCount > 0) _buildSelectionBadge(),
-            _buildActionButton(),
+            if (selectedCount > 0) _buildSelectionBadge(context),
+            _buildActionButton(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSelectionBadge() {
+  Widget _buildSelectionBadge(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8, right: 4),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -59,16 +59,15 @@ class DrawingOverlay extends StatelessWidget {
       ),
       child: Text(
         "$selectedCount KARTU",
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 10,
-        ),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
       ),
     );
   }
 
-  Widget _buildActionButton() {
+  Widget _buildActionButton(BuildContext context) {
     final hasSelection = selectedCount > 0;
 
     return SizedBox(
@@ -87,11 +86,10 @@ class DrawingOverlay extends StatelessWidget {
         ),
         label: Text(
           hasSelection ? "TUKAR" : (isMidGame ? "NANTI" : "LEWATI"),
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-            letterSpacing: 1,
-          ),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontSize: 14,
+                letterSpacing: 1,
+              ),
         ),
         icon: Icon(hasSelection ? Icons.swap_horiz : Icons.forward, size: 20),
       ),

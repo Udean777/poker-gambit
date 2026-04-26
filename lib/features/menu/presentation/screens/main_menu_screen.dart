@@ -12,7 +12,9 @@ import 'package:card_games/features/leaderboard/presentation/screens/leaderboard
 import 'package:card_games/features/menu/presentation/widgets/login_banner.dart';
 import 'package:card_games/features/menu/presentation/widgets/menu_button.dart';
 import 'package:card_games/features/menu/presentation/widgets/menu_logo.dart';
+import 'package:card_games/features/menu/presentation/screens/card_gallery_screen.dart';
 import 'package:card_games/features/menu/presentation/widgets/sync_indicator.dart';
+import 'package:card_games/core/services/image_precache_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,6 +45,10 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
     _controller.forward();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ImagePrecacheService.precacheAllCards(context);
+    });
   }
 
   @override
@@ -158,6 +164,15 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
         isLocked: true,
         onPressed: () => _showComingSoon(context),
       ),
+      gap,
+      MenuButton(
+        label: 'CARD COLLECTION',
+        icon: Icons.style,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CardGalleryScreen()),
+        ),
+      ),
       const SizedBox(height: 24),
       MenuButton(
         label: 'QUIT GAME',
@@ -190,7 +205,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen>
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
