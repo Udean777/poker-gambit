@@ -1,4 +1,4 @@
-import 'package:card_games/core/theme/game_theme.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {

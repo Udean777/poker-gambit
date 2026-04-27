@@ -1,9 +1,9 @@
-import 'package:card_games/features/game/domain/logic/card_effects/destroyer_effect.dart';
-import 'package:card_games/features/game/domain/logic/card_effects/i_card_effect.dart';
-import 'package:card_games/features/game/domain/logic/card_effects/spy_effect.dart';
-import 'package:card_games/features/game/domain/logic/card_effects/witch_effect.dart';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/destroyer_effect.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/i_card_effect.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/spy_effect.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/witch_effect.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
 
 class CardEffectHandler {
   final Map<String, ICardEffect> _effects = {};

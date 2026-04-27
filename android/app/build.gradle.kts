@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ssajud.card_games.card_games"
+    namespace = "com.ssajudn.poker_gambit"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.ssajud.card_games.card_games"
+        applicationId = "com.ssajudn.poker_gambit"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

@@ -1,7 +1,7 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/presentation/providers/game_provider.dart';
-import 'package:card_games/features/game/presentation/widgets/playing_card.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/presentation/providers/game_provider.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/playing_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

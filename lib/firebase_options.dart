@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -25,15 +26,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -46,33 +41,57 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCnfRWw31sAbb6vFFt8Gi8h-Fqzw4dlRwI',
-    appId: '1:740482939505:web:d0714ad5121b725ea179d0',
-    messagingSenderId: '740482939505',
-    projectId: 'poker-gambit',
-    authDomain: 'poker-gambit.firebaseapp.com',
-    storageBucket: 'poker-gambit.firebasestorage.app',
-    measurementId: 'G-SKVMBLKS0H',
+  static FirebaseOptions get web => FirebaseOptions(
+    apiKey: dotenv.get('FIREBASE_API_KEY_WEB', fallback: ''),
+    appId: dotenv.get('FIREBASE_APP_ID_WEB', fallback: ''),
+    messagingSenderId: dotenv.get('FIREBASE_MESSAGING_SENDER_ID', fallback: ''),
+    projectId: dotenv.get('FIREBASE_PROJECT_ID', fallback: ''),
+    authDomain: dotenv.get('FIREBASE_AUTH_DOMAIN', fallback: ''),
+    storageBucket: dotenv.get('FIREBASE_STORAGE_BUCKET', fallback: ''),
+    measurementId: dotenv.get('FIREBASE_MEASUREMENT_ID_WEB', fallback: ''),
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA76zMvbPKkqzNmGUNho-ta4tvRH6-FJ-0',
-    appId: '1:740482939505:android:4b237754c9ee13a2a179d0',
-    messagingSenderId: '740482939505',
-    projectId: 'poker-gambit',
-    storageBucket: 'poker-gambit.firebasestorage.app',
+  static FirebaseOptions get android => FirebaseOptions(
+    apiKey: dotenv.get('FIREBASE_API_KEY_ANDROID', fallback: ''),
+    appId: dotenv.get('FIREBASE_APP_ID_ANDROID', fallback: ''),
+    messagingSenderId: dotenv.get('FIREBASE_MESSAGING_SENDER_ID', fallback: ''),
+    projectId: dotenv.get('FIREBASE_PROJECT_ID', fallback: ''),
+    storageBucket: dotenv.get('FIREBASE_STORAGE_BUCKET', fallback: ''),
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCb0NXoz4rca1NKv7wCULVPehU8n5lytXM',
-    appId: '1:740482939505:ios:7dd3e979c1d9e5dba179d0',
-    messagingSenderId: '740482939505',
-    projectId: 'poker-gambit',
-    storageBucket: 'poker-gambit.firebasestorage.app',
-    androidClientId: '740482939505-rde837sgpnpjgmjdg6q58ovocsdorq21.apps.googleusercontent.com',
-    iosClientId: '740482939505-100nqphhn4bnqdum6no74hf4ii5mp8k0.apps.googleusercontent.com',
-    iosBundleId: 'com.ssajud.cardgames.cardGames',
+  static FirebaseOptions get ios => FirebaseOptions(
+    apiKey: dotenv.get('FIREBASE_API_KEY_IOS', fallback: ''),
+    appId: dotenv.get('FIREBASE_APP_ID_IOS', fallback: ''),
+    messagingSenderId: dotenv.get('FIREBASE_MESSAGING_SENDER_ID', fallback: ''),
+    projectId: dotenv.get('FIREBASE_PROJECT_ID', fallback: ''),
+    storageBucket: dotenv.get('FIREBASE_STORAGE_BUCKET', fallback: ''),
+    androidClientId:
+        dotenv.get('GOOGLE_ANDROID_CLIENT_ID', fallback: ''),
+    iosClientId:
+        dotenv.get('GOOGLE_IOS_CLIENT_ID', fallback: ''),
+    iosBundleId: dotenv.get('IOS_BUNDLE_ID', fallback: ''),
   );
 
+  static FirebaseOptions get macos => FirebaseOptions(
+    apiKey: dotenv.get('FIREBASE_API_KEY_MACOS', fallback: ''),
+    appId: dotenv.get('FIREBASE_APP_ID_IOS', fallback: ''),
+    messagingSenderId: dotenv.get('FIREBASE_MESSAGING_SENDER_ID', fallback: ''),
+    projectId: dotenv.get('FIREBASE_PROJECT_ID', fallback: ''),
+    storageBucket: dotenv.get('FIREBASE_STORAGE_BUCKET', fallback: ''),
+    androidClientId:
+        dotenv.get('GOOGLE_ANDROID_CLIENT_ID', fallback: ''),
+    iosClientId:
+        dotenv.get('GOOGLE_IOS_CLIENT_ID', fallback: ''),
+    iosBundleId: dotenv.get('IOS_BUNDLE_ID', fallback: ''),
+  );
+
+  static FirebaseOptions get windows => FirebaseOptions(
+    apiKey: dotenv.get('FIREBASE_API_KEY_WINDOWS', fallback: ''),
+    appId: dotenv.get('FIREBASE_APP_ID_WINDOWS', fallback: ''),
+    messagingSenderId: dotenv.get('FIREBASE_MESSAGING_SENDER_ID', fallback: ''),
+    projectId: dotenv.get('FIREBASE_PROJECT_ID', fallback: ''),
+    authDomain: dotenv.get('FIREBASE_AUTH_DOMAIN', fallback: ''),
+    storageBucket: dotenv.get('FIREBASE_STORAGE_BUCKET', fallback: ''),
+    measurementId: dotenv.get('FIREBASE_MEASUREMENT_ID_WINDOWS', fallback: ''),
+  );
 }

@@ -1,6 +1,6 @@
-import 'package:card_games/core/constants/game_constants.dart';
-import 'package:card_games/features/game/presentation/widgets/animations/discard_animation.dart';
-import 'package:card_games/features/game/presentation/widgets/animations/draw_animation.dart';
+import 'package:poker_gambit/core/constants/game_constants.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/animations/discard_animation.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/animations/draw_animation.dart';
 import 'package:flutter/material.dart';
 
 /// Orchestrates the two-phase swap animation (discard → draw).

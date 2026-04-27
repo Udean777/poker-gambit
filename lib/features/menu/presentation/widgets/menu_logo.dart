@@ -1,4 +1,5 @@
-import 'package:card_games/core/theme/game_theme.dart';
+import 'package:poker_gambit/core/config/app_config.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
 import 'package:flutter/material.dart';
 
 class MenuLogo extends StatelessWidget {
@@ -31,7 +32,7 @@ class MenuLogo extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Text(
-          'POKER GAMBIT',
+          AppConfig.appName.toUpperCase(),
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w900,

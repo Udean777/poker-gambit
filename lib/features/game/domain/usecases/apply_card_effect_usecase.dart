@@ -1,6 +1,6 @@
-import 'package:card_games/features/game/domain/logic/card_effects/card_effect_handler.dart';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/card_effect_handler.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
 
 class ApplyCardEffectUseCase {
   final CardEffectHandler _handler;

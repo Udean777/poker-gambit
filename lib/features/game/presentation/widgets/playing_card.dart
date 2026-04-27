@@ -1,14 +1,22 @@
 import 'dart:math';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/presentation/widgets/card_container.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/card_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PlayingCard extends StatelessWidget {
   final CardModel card;
   final bool isDraggable;
+  final double? width;
+  final double? height;
 
-  const PlayingCard({super.key, required this.card, this.isDraggable = false});
+  const PlayingCard({
+    super.key,
+    required this.card,
+    this.isDraggable = false,
+    this.width,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +57,8 @@ class PlayingCard extends StatelessWidget {
       child: Opacity(
         opacity: card.isInvalid ? 0.4 : 1.0,
         child: CardContainer(
+          width: width,
+          height: height,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: CachedNetworkImage(
@@ -75,6 +85,8 @@ class PlayingCard extends StatelessWidget {
 
   Widget _buildBack() {
     return CardContainer(
+      width: width,
+      height: height,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Image.asset(

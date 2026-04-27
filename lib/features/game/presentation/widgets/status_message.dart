@@ -49,13 +49,13 @@ class StatusMessage extends StatelessWidget {
           message.toUpperCase(),
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.white,
-                fontSize: 14,
-                letterSpacing: 2,
-                shadows: const [
-                  Shadow(color: Colors.black, blurRadius: 4, offset: Offset(1, 1)),
-                ],
-              ),
+            color: Colors.white,
+            fontSize: 14,
+            letterSpacing: 2,
+            shadows: const [
+              Shadow(color: Colors.black, blurRadius: 4, offset: Offset(1, 1)),
+            ],
+          ),
         ),
       ),
     );

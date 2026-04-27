@@ -1,6 +1,6 @@
-import 'package:card_games/core/constants/game_constants.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/domain/services/i_deck_service.dart';
+import 'package:poker_gambit/core/constants/game_constants.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/services/i_deck_service.dart';
 
 class StartNewGameUseCase {
   final IDeckService _deckService;

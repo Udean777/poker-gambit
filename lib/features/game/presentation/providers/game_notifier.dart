@@ -1,19 +1,20 @@
 import 'dart:async';
-import 'package:card_games/core/constants/game_constants.dart';
-import 'package:card_games/core/utils/card_utils.dart';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/domain/services/i_deck_service.dart';
-import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
-import 'package:card_games/features/game/domain/usecases/apply_card_effect_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/evaluate_round_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/execute_ai_turn_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/get_stats_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/play_card_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/save_game_result_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/start_new_game_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/swap_cards_usecase.dart';
-import 'package:card_games/features/game/presentation/providers/mixins/game_timer_mixin.dart';
+import 'package:poker_gambit/core/constants/game_constants.dart';
+import 'package:poker_gambit/core/utils/card_utils.dart';
+import 'package:poker_gambit/features/game/domain/logic/i_poker_evaluator.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/services/i_deck_service.dart';
+import 'package:poker_gambit/features/game/domain/services/i_poker_ai_service.dart';
+import 'package:poker_gambit/features/game/domain/usecases/apply_card_effect_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/evaluate_round_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/execute_ai_turn_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/get_stats_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/play_card_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/save_game_result_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/start_new_game_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/swap_cards_usecase.dart';
+import 'package:poker_gambit/features/game/presentation/providers/mixins/game_timer_mixin.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
@@ -27,6 +28,7 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
   final SaveGameResultUseCase _saveGameResultUseCase;
   final IPokerAiService _aiService;
   final IDeckService _deckService;
+  final IPokerEvaluator _evaluator;
 
   GameNotifier({
     required StartNewGameUseCase startNewGameUseCase,
@@ -39,6 +41,7 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
     required SaveGameResultUseCase saveGameResultUseCase,
     required IPokerAiService aiService,
     required IDeckService deckService,
+    required IPokerEvaluator evaluator,
   }) : _startNewGameUseCase = startNewGameUseCase,
        _swapCardsUseCase = swapCardsUseCase,
        _playCardUseCase = playCardUseCase,
@@ -49,6 +52,7 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
        _saveGameResultUseCase = saveGameResultUseCase,
        _aiService = aiService,
        _deckService = deckService,
+       _evaluator = evaluator,
        super(const GameState(deck: [], playerHand: [], aiHand: [])) {
     _init();
   }
@@ -92,10 +96,92 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
     }
   }
 
-  void onCounter() {
-    if (state.qteActive) {
-      state = state.copyWith(qteActive: false, message: 'COUNTER SUCCESSFUL!');
+  void onWitchCardSelected(CardModel selected) {
+    if (!state.isWitchPicking) return;
+
+    final isPlayerSource = state.witchSourceIsPlayer ?? false;
+    final targetHand = isPlayerSource ? state.aiHand : state.playerHand;
+    if (targetHand.isEmpty) return;
+
+    final randomIndex = DateTime.now().millisecond % targetHand.length;
+    final newHand = List<CardModel>.from(targetHand);
+    final oldCard = newHand[randomIndex];
+
+    // Sabotage: card replaces a random card in opponent's hand
+    newHand[randomIndex] = selected.copyWith(isFaceUp: oldCard.isFaceUp);
+
+    // Other cards go back to bottom of deck
+    final otherCards = state.witchOptions.where((c) => c != selected).toList();
+    final newDeck = [...state.deck, ...otherCards];
+
+    state = state.copyWith(
+      aiHand: isPlayerSource ? newHand : state.aiHand,
+      playerHand: isPlayerSource ? state.playerHand : newHand,
+      deck: newDeck,
+      isWitchPicking: false,
+      witchOptions: [],
+      message: isPlayerSource
+          ? 'WITCH: AI tersabotase!'
+          : 'AI WITCH: Anda tersabotase!',
+    );
+  }
+
+  void onSpyCardSelected(CardModel selected) {
+    if (!state.isSpyPicking) return;
+
+    state = state.copyWith(spySelectedCard: selected);
+
+    // Close overlay after 5 seconds
+    Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        state = state.copyWith(
+          isSpyPicking: false,
+          spyOptions: [],
+          spySelectedCard: null,
+        );
+      }
+    });
+  }
+
+  void dismissRoundResult() {
+    state = state.copyWith(showRoundResult: false);
+    // After result is dismissed, we check if game should end or start new round
+    if (state.deck.isEmpty &&
+        state.playerHand.isEmpty &&
+        state.aiHand.isEmpty) {
+      // Game over logic is already handled in evaluateRound via UseCase
+    } else {
+      // Logic for next turn/round could go here
     }
+  }
+
+  void onDestroyCardSelected(CardModel selected) async {
+    if (!state.isDestroyPicking) return;
+
+    final isPlayerSource = state.destroySourceIsPlayer ?? false;
+
+    // Set the card being destroyed to trigger animation
+    state = state.copyWith(cardBeingDestroyed: selected);
+
+    // Wait for "Burn" animation
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+    if (!mounted) return;
+
+    final targetTable = isPlayerSource
+        ? state.aiTableCards
+        : state.playerTableCards;
+    final newTable = targetTable.where((c) => c != selected).toList();
+
+    state = state.copyWith(
+      aiTableCards: isPlayerSource ? newTable : state.aiTableCards,
+      playerTableCards: isPlayerSource ? state.playerTableCards : newTable,
+      isDestroyPicking: false,
+      cardBeingDestroyed: null,
+      message: isPlayerSource
+          ? 'JOKER: Kartu AI dihancurkan!'
+          : 'AI JOKER: Kartu Anda dihancurkan!',
+    );
   }
 
   // ─── Player Actions ───────────────────────────────────────────────
@@ -269,17 +355,8 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
   // ─── Card Effects & Evaluation ────────────────────────────────────
 
   Future<void> _applyCardEffect(CardModel card, bool isPlayer) async {
+    // Skills now apply directly as part of the "punish" mechanic
     bool shouldApply = true;
-
-    if (!isPlayer &&
-        (card.valueLabel == 'J' || card.valueLabel == 'Q' || card.isJoker)) {
-      state = state.copyWith(qteActive: true, message: 'AI SKILL! COUNTER!');
-      await Future.delayed(GameConstants.qteDuration);
-      if (!state.qteActive) {
-        shouldApply = false;
-      }
-      state = state.copyWith(qteActive: false);
-    }
 
     if (shouldApply) {
       state = await _applyCardEffectUseCase.execute(
@@ -288,16 +365,42 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
         isPlayer: isPlayer,
       );
 
-      if (card.valueLabel == 'J') {
-        await Future.delayed(GameConstants.spyRevealDuration);
-        if (mounted) {
-          final targetHand = isPlayer ? state.aiHand : state.playerHand;
-          final hiddenHand = targetHand
-              .map((c) => c.copyWith(isFaceUp: false))
-              .toList();
-          state = isPlayer
-              ? state.copyWith(aiHand: hiddenHand)
-              : state.copyWith(playerHand: hiddenHand);
+      // Handle AI Spy Selection
+      if (state.isSpyPicking && state.spySourceIsPlayer == false) {
+        await Future.delayed(const Duration(milliseconds: 2000));
+        if (mounted && state.isSpyPicking) {
+          // AI selects a random card to peek at
+          final randomIndex =
+              DateTime.now().millisecond % state.spyOptions.length;
+          onSpyCardSelected(state.spyOptions[randomIndex]);
+        }
+      }
+
+      // Handle AI Destroyer Selection
+      if (state.isDestroyPicking && state.destroySourceIsPlayer == false) {
+        await Future.delayed(const Duration(milliseconds: 2000));
+        if (mounted && state.isDestroyPicking) {
+          final targetTable = state.playerTableCards;
+          if (targetTable.isNotEmpty) {
+            // AI targets the highest value card or just the last one
+            final target = targetTable.last;
+            onDestroyCardSelected(target);
+          }
+        }
+      }
+
+      // Handle AI Witch Selection
+      if (state.isWitchPicking && state.witchSourceIsPlayer == false) {
+        // AI thinking time is handled by the overlay's internal logic for UX,
+        // but here we trigger the logic after a delay.
+        await Future.delayed(
+          const Duration(milliseconds: 2500),
+        ); // Time for AI to "think"
+        if (mounted && state.isWitchPicking) {
+          final worstCard = await _aiService.selectWorstCard(
+            state.witchOptions,
+          );
+          onWitchCardSelected(worstCard);
         }
       }
     }
@@ -307,7 +410,16 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
     while (state.isPaused) {
       await Future.delayed(GameConstants.pauseCheckDelay);
     }
+
+    final hasJoker = state.playerTableCards.any((c) => c.isJoker);
+
     state = _evaluateRoundUseCase.execute(state);
+
+    if (hasJoker) {
+      state = state.copyWith(wildcardRankName: state.lastPlayerHandRank?.label);
+    }
+
+    state = state.copyWith(showRoundResult: true);
 
     if (state.lastPlayerHandRank != null) {
       final isWin = state.lastRoundPlayerWon ?? false;
@@ -335,6 +447,21 @@ class GameNotifier extends StateNotifier<GameState> with GameTimerMixin {
       phase: GamePhase.showdown,
       message: 'Showdown!',
     );
+
+    // Check for Joker in player table to show notification
+    final playerResult = _evaluator.evaluate(state.playerTableCards);
+    final hasJoker = state.playerTableCards.any((c) => c.isJoker);
+    if (hasJoker) {
+      state = state.copyWith(
+        showWildcardNotify: true,
+        wildcardRankName: playerResult.rank.label,
+      );
+      // Auto-hide after 3 seconds
+      Timer(const Duration(seconds: 3), () {
+        if (mounted) state = state.copyWith(showWildcardNotify: false);
+      });
+    }
+
     Future.delayed(GameConstants.showdownDelay, evaluateRound);
   }
 

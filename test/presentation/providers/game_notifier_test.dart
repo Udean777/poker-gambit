@@ -1,29 +1,42 @@
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/domain/models/game_stats.dart';
-import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
-import 'package:card_games/features/game/domain/services/i_deck_service.dart';
-import 'package:card_games/features/game/domain/usecases/start_new_game_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/swap_cards_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/play_card_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/evaluate_round_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/execute_ai_turn_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/apply_card_effect_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/get_stats_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/save_game_result_usecase.dart';
-import 'package:card_games/features/game/presentation/providers/game_notifier.dart';
+import 'package:poker_gambit/features/game/domain/logic/i_poker_evaluator.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/models/game_stats.dart';
+import 'package:poker_gambit/features/game/domain/services/i_poker_ai_service.dart';
+import 'package:poker_gambit/features/game/domain/services/i_deck_service.dart';
+import 'package:poker_gambit/features/game/domain/usecases/start_new_game_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/swap_cards_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/play_card_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/evaluate_round_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/execute_ai_turn_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/apply_card_effect_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/get_stats_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/save_game_result_usecase.dart';
+import 'package:poker_gambit/features/game/presentation/providers/game_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockStartNewGameUseCase extends Mock implements StartNewGameUseCase {}
+
 class MockSwapCardsUseCase extends Mock implements SwapCardsUseCase {}
+
 class MockPlayCardUseCase extends Mock implements PlayCardUseCase {}
+
 class MockEvaluateRoundUseCase extends Mock implements EvaluateRoundUseCase {}
+
 class MockExecuteAiTurnUseCase extends Mock implements ExecuteAiTurnUseCase {}
-class MockApplyCardEffectUseCase extends Mock implements ApplyCardEffectUseCase {}
+
+class MockApplyCardEffectUseCase extends Mock
+    implements ApplyCardEffectUseCase {}
+
 class MockGetStatsUseCase extends Mock implements GetStatsUseCase {}
+
 class MockSaveGameResultUseCase extends Mock implements SaveGameResultUseCase {}
+
 class MockPokerAiService extends Mock implements IPokerAiService {}
+
 class MockDeckService extends Mock implements IDeckService {}
+
+class MockPokerEvaluator extends Mock implements IPokerEvaluator {}
 
 void main() {
   late GameNotifier notifier;
@@ -37,6 +50,7 @@ void main() {
   late MockSaveGameResultUseCase mockSaveGameResult;
   late MockPokerAiService mockAiService;
   late MockDeckService mockDeckService;
+  late MockPokerEvaluator mockEvaluator;
 
   setUp(() {
     mockStartNewGame = MockStartNewGameUseCase();
@@ -49,6 +63,7 @@ void main() {
     mockSaveGameResult = MockSaveGameResultUseCase();
     mockAiService = MockPokerAiService();
     mockDeckService = MockDeckService();
+    mockEvaluator = MockPokerEvaluator();
 
     final initialState = const GameState(
       deck: [],
@@ -57,9 +72,9 @@ void main() {
       highScore: 100,
     );
 
-    when(() => mockGetStats()).thenAnswer(
-      (_) async => const GameStats(highScore: 100),
-    );
+    when(
+      () => mockGetStats(),
+    ).thenAnswer((_) async => const GameStats(highScore: 100));
     when(
       () => mockStartNewGame.execute(highScore: any(named: 'highScore')),
     ).thenReturn(initialState);
@@ -75,6 +90,7 @@ void main() {
       saveGameResultUseCase: mockSaveGameResult,
       aiService: mockAiService,
       deckService: mockDeckService,
+      evaluator: mockEvaluator,
     );
   });
 

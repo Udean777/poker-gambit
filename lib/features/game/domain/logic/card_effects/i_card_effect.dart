@@ -1,4 +1,4 @@
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
 
 abstract class ICardEffect {
   /// Unique identifier for the card that triggers this effect (e.g., 'J', 'Q', 'Joker').

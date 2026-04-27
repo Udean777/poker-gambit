@@ -1,5 +1,6 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/poker_hand.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/poker_hand.dart';
+import 'package:poker_gambit/features/game/domain/models/round_result_info.dart';
 import 'package:flutter/foundation.dart';
 
 enum GamePhase { drawing, playing, showdown, gameOver }
@@ -24,10 +25,23 @@ class GameState {
   final bool isAnimating;
   final int timeLeft;
   final bool isPaused;
-  final bool qteActive;
   final int highScore;
   final bool? lastRoundPlayerWon;
   final PokerHandRank? lastPlayerHandRank;
+  final List<CardModel> witchOptions;
+  final bool isWitchPicking;
+  final bool? witchSourceIsPlayer;
+  final List<CardModel> spyOptions;
+  final bool isSpyPicking;
+  final bool? spySourceIsPlayer;
+  final CardModel? spySelectedCard;
+  final bool isDestroyPicking;
+  final bool? destroySourceIsPlayer;
+  final CardModel? cardBeingDestroyed;
+  final bool showWildcardNotify;
+  final String? wildcardRankName;
+  final RoundResultInfo? lastRoundResult;
+  final bool showRoundResult;
 
   const GameState({
     required this.deck,
@@ -48,10 +62,23 @@ class GameState {
     this.isAnimating = false,
     this.timeLeft = 0,
     this.isPaused = false,
-    this.qteActive = false,
     this.highScore = 0,
     this.lastRoundPlayerWon,
     this.lastPlayerHandRank,
+    this.witchOptions = const [],
+    this.isWitchPicking = false,
+    this.witchSourceIsPlayer,
+    this.spyOptions = const [],
+    this.isSpyPicking = false,
+    this.spySourceIsPlayer,
+    this.spySelectedCard,
+    this.isDestroyPicking = false,
+    this.destroySourceIsPlayer,
+    this.cardBeingDestroyed,
+    this.showWildcardNotify = false,
+    this.wildcardRankName,
+    this.lastRoundResult,
+    this.showRoundResult = false,
   });
 
   int get totalTableCards => playerTableCards.length + aiTableCards.length;
@@ -76,10 +103,23 @@ class GameState {
     bool? isAnimating,
     int? timeLeft,
     bool? isPaused,
-    bool? qteActive,
     int? highScore,
     bool? lastRoundPlayerWon,
     PokerHandRank? lastPlayerHandRank,
+    List<CardModel>? witchOptions,
+    bool? isWitchPicking,
+    bool? witchSourceIsPlayer,
+    List<CardModel>? spyOptions,
+    bool? isSpyPicking,
+    bool? spySourceIsPlayer,
+    CardModel? spySelectedCard,
+    bool? isDestroyPicking,
+    bool? destroySourceIsPlayer,
+    CardModel? cardBeingDestroyed,
+    bool? showWildcardNotify,
+    String? wildcardRankName,
+    RoundResultInfo? lastRoundResult,
+    bool? showRoundResult,
   }) {
     return GameState(
       deck: deck ?? this.deck,
@@ -100,10 +140,24 @@ class GameState {
       isAnimating: isAnimating ?? this.isAnimating,
       timeLeft: timeLeft ?? this.timeLeft,
       isPaused: isPaused ?? this.isPaused,
-      qteActive: qteActive ?? this.qteActive,
       highScore: highScore ?? this.highScore,
       lastRoundPlayerWon: lastRoundPlayerWon ?? this.lastRoundPlayerWon,
       lastPlayerHandRank: lastPlayerHandRank ?? this.lastPlayerHandRank,
+      witchOptions: witchOptions ?? this.witchOptions,
+      isWitchPicking: isWitchPicking ?? this.isWitchPicking,
+      witchSourceIsPlayer: witchSourceIsPlayer ?? this.witchSourceIsPlayer,
+      spyOptions: spyOptions ?? this.spyOptions,
+      isSpyPicking: isSpyPicking ?? this.isSpyPicking,
+      spySourceIsPlayer: spySourceIsPlayer ?? this.spySourceIsPlayer,
+      spySelectedCard: spySelectedCard ?? this.spySelectedCard,
+      isDestroyPicking: isDestroyPicking ?? this.isDestroyPicking,
+      destroySourceIsPlayer:
+          destroySourceIsPlayer ?? this.destroySourceIsPlayer,
+      cardBeingDestroyed: cardBeingDestroyed ?? this.cardBeingDestroyed,
+      showWildcardNotify: showWildcardNotify ?? this.showWildcardNotify,
+      wildcardRankName: wildcardRankName ?? this.wildcardRankName,
+      lastRoundResult: lastRoundResult ?? this.lastRoundResult,
+      showRoundResult: showRoundResult ?? this.showRoundResult,
     );
   }
 
@@ -130,10 +184,21 @@ class GameState {
           isAnimating == other.isAnimating &&
           timeLeft == other.timeLeft &&
           isPaused == other.isPaused &&
-          qteActive == other.qteActive &&
           highScore == other.highScore &&
           lastRoundPlayerWon == other.lastRoundPlayerWon &&
-          lastPlayerHandRank == other.lastPlayerHandRank;
+          lastPlayerHandRank == other.lastPlayerHandRank &&
+          listEquals(witchOptions, other.witchOptions) &&
+          isWitchPicking == other.isWitchPicking &&
+          witchSourceIsPlayer == other.witchSourceIsPlayer &&
+          listEquals(spyOptions, other.spyOptions) &&
+          isSpyPicking == other.isSpyPicking &&
+          spySourceIsPlayer == other.spySourceIsPlayer &&
+          spySelectedCard == other.spySelectedCard &&
+          isDestroyPicking == other.isDestroyPicking &&
+          destroySourceIsPlayer == other.destroySourceIsPlayer &&
+          cardBeingDestroyed == other.cardBeingDestroyed &&
+          showWildcardNotify == other.showWildcardNotify &&
+          wildcardRankName == other.wildcardRankName;
 
   @override
   int get hashCode =>
@@ -155,8 +220,19 @@ class GameState {
       isAnimating.hashCode ^
       timeLeft.hashCode ^
       isPaused.hashCode ^
-      qteActive.hashCode ^
       highScore.hashCode ^
       lastRoundPlayerWon.hashCode ^
-      lastPlayerHandRank.hashCode;
+      lastPlayerHandRank.hashCode ^
+      witchOptions.hashCode ^
+      isWitchPicking.hashCode ^
+      witchSourceIsPlayer.hashCode ^
+      spyOptions.hashCode ^
+      isSpyPicking.hashCode ^
+      spySourceIsPlayer.hashCode ^
+      spySelectedCard.hashCode ^
+      isDestroyPicking.hashCode ^
+      destroySourceIsPlayer.hashCode ^
+      cardBeingDestroyed.hashCode ^
+      showWildcardNotify.hashCode ^
+      wildcardRankName.hashCode;
 }

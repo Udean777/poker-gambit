@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:card_games/features/game/domain/services/deck_service.dart';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/core/constants/game_constants.dart';
+import 'package:poker_gambit/features/game/domain/services/deck_service.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/core/constants/game_constants.dart';
 
 void main() {
   late DeckService deckService;

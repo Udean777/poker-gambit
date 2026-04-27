@@ -78,10 +78,9 @@ class _CompactScoreItem extends StatelessWidget {
         if (!isLeft) ...[
           Text(
             "$score",
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: color,
-                  fontSize: 22,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(color: color, fontSize: 22),
           ),
           const SizedBox(width: 8),
         ],
@@ -98,10 +97,9 @@ class _CompactScoreItem extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             "$score",
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: color,
-                  fontSize: 22,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(color: color, fontSize: 22),
           ),
         ],
       ],

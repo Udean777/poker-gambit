@@ -1,0 +1,75 @@
+{
+  "@@locale": "en",
+  "appTitle": "Poker Gambit",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "play": "Play",
+  "@play": {
+    "description": "Label for the play button"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Label for the settings button"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Label for the profile section"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Label for the language selection"
+  },
+  "english": "English",
+  "@english": {
+    "description": "The English language"
+  },
+  "indonesian": "Indonesian",
+  "@indonesian": {
+    "description": "The Indonesian language"
+  },
+  "vsAi": "VS AI",
+  "@vsAi": {
+    "description": "Label for VS AI mode"
+  },
+  "vsPlayer": "VS PLAYER",
+  "@vsPlayer": {
+    "description": "Label for VS Player mode"
+  },
+  "leaderboard": "LEADERBOARD",
+  "@leaderboard": {
+    "description": "Label for the leaderboard"
+  },
+  "multiplayer": "MULTIPLAYER",
+  "@multiplayer": {
+    "description": "Label for multiplayer mode"
+  },
+  "cardCombos": "CARD COMBOS",
+  "@cardCombos": {
+    "description": "Label for the card combos section"
+  },
+  "quitGame": "QUIT GAME",
+  "@quitGame": {
+    "description": "Label for the quit game button"
+  },
+  "comingSoon": "Coming soon!",
+  "@comingSoon": {
+    "description": "Message for features not yet implemented"
+  },
+  "offlineLeaderboard": "Leaderboard is not available while offline",
+  "@offlineLeaderboard": {
+    "description": "Message shown when trying to access leaderboard offline"
+  },
+  "profileSection": "PROFILE",
+  "@profileSection": {
+    "description": "Title for the profile section in settings"
+  },
+  "gameSettingsSection": "GAME SETTINGS",
+  "@gameSettingsSection": {
+    "description": "Title for the game settings section"
+  },
+  "aboutSection": "ABOUT",
+  "@aboutSection": {
+    "description": "Title for the about section in settings"
+  }
+}

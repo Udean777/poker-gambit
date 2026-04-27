@@ -1,4 +1,4 @@
-import 'package:card_games/features/auth/domain/models/app_user.dart';
+import 'package:poker_gambit/features/auth/domain/models/app_user.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatarWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:card_games/core/theme/game_theme.dart';
-import 'package:card_games/features/auth/presentation/providers/auth_provider.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
+import 'package:poker_gambit/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,7 +31,7 @@ class _AutoGuestSignInState extends ConsumerState<AutoGuestSignIn> {
     setState(() {
       _isTimedOut = false;
     });
-    
+
     // Start a timeout timer to surface stalled requests
     _timeoutTimer?.cancel();
     _timeoutTimer = Timer(const Duration(seconds: 15), () {
@@ -66,12 +66,17 @@ class _AutoGuestSignInState extends ConsumerState<AutoGuestSignIn> {
           padding: const EdgeInsets.all(24.0),
           child: _isTimedOut
               ? _ErrorView(
-                  message: 'Connection is taking longer than expected. Please check your internet and try again.',
+                  message:
+                      'Connection is taking longer than expected. Please check your internet and try again.',
                   onRetry: _signIn,
                 )
               : authState.when(
-                  data: (_) => const CircularProgressIndicator(color: GameTheme.accentAmber),
-                  loading: () => const CircularProgressIndicator(color: GameTheme.accentAmber),
+                  data: (_) => const CircularProgressIndicator(
+                    color: GameTheme.accentAmber,
+                  ),
+                  loading: () => const CircularProgressIndicator(
+                    color: GameTheme.accentAmber,
+                  ),
                   error: (error, _) => _ErrorView(
                     message: 'Authentication failed. Please try again.',
                     onRetry: _signIn,
@@ -87,10 +92,7 @@ class _ErrorView extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const _ErrorView({
-    required this.message,
-    required this.onRetry,
-  });
+  const _ErrorView({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {

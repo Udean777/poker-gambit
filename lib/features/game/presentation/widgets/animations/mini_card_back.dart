@@ -1,5 +1,5 @@
-import 'package:card_games/core/constants/game_constants.dart';
-import 'package:card_games/features/game/presentation/widgets/card_container.dart';
+import 'package:poker_gambit/core/constants/game_constants.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/card_container.dart';
 import 'package:flutter/material.dart';
 
 /// Small card-back widget used in draw animations.

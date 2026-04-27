@@ -1,5 +1,6 @@
-import 'package:card_games/features/game/domain/logic/i_poker_evaluator.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/logic/i_poker_evaluator.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/models/round_result_info.dart';
 
 class EvaluateRoundUseCase {
   final IPokerEvaluator _evaluator;
@@ -58,6 +59,14 @@ class EvaluateRoundUseCase {
       message: resultMessage,
       lastRoundPlayerWon: roundPlayerWon,
       lastPlayerHandRank: playerResult.rank,
+      lastRoundResult: RoundResultInfo(
+        isPlayerWinner: roundPlayerWon,
+        playerHandName: playerResult.rank.label,
+        playerTableCards: List.from(currentState.playerTableCards),
+        aiHandName: aiResult.rank.label,
+        aiTableCards: List.from(currentState.aiTableCards),
+        resultMessage: resultMessage,
+      ),
     );
   }
 }

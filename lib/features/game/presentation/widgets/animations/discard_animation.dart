@@ -1,6 +1,6 @@
 import 'dart:ui' show lerpDouble;
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/presentation/widgets/playing_card.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/playing_card.dart';
 import 'package:flutter/material.dart';
 
 class DiscardItem {

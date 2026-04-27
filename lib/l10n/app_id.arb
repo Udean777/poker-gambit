@@ -1,0 +1,21 @@
+{
+  "@@locale": "id",
+  "appTitle": "Poker Gambit",
+  "play": "Main",
+  "settings": "Pengaturan",
+  "profile": "Profil",
+  "language": "Bahasa",
+  "english": "Inggris",
+  "indonesian": "Indonesia",
+  "vsAi": "VS AI",
+  "vsPlayer": "VS PEMAIN",
+  "leaderboard": "PAPAN PERINGKAT",
+  "multiplayer": "MULTIPEMAIN",
+  "cardCombos": "KOMBO KARTU",
+  "quitGame": "KELUAR GAME",
+  "comingSoon": "Segera hadir!",
+  "offlineLeaderboard": "Papan peringkat tidak tersedia saat offline",
+  "profileSection": "PROFIL",
+  "gameSettingsSection": "PENGATURAN GAME",
+  "aboutSection": "TENTANG"
+}

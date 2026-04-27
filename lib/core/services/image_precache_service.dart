@@ -1,4 +1,4 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

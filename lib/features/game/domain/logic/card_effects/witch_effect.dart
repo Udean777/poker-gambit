@@ -1,6 +1,5 @@
-import 'package:card_games/features/game/domain/logic/card_effects/i_card_effect.dart';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/i_card_effect.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
 
 class WitchEffect implements ICardEffect {
   @override
@@ -11,25 +10,19 @@ class WitchEffect implements ICardEffect {
     GameState currentState, {
     required bool isPlayer,
   }) async {
-    final targetHand = isPlayer ? currentState.playerHand : currentState.aiHand;
-    if (targetHand.isEmpty || currentState.deck.isEmpty) return currentState;
+    if (currentState.deck.length < 4) return currentState;
 
-    final newDeck = List<CardModel>.from(currentState.deck);
-    final newHand = List<CardModel>.from(targetHand);
-    final randomIndex = DateTime.now().millisecond % targetHand.length;
+    final options = currentState.deck.take(4).toList();
+    final remainingDeck = currentState.deck.skip(4).toList();
 
-    newHand[randomIndex] = newDeck.removeAt(0).copyWith(isFaceUp: isPlayer);
-
-    return isPlayer
-        ? currentState.copyWith(
-            playerHand: newHand,
-            deck: newDeck,
-            message: 'WITCH: Menukar kartu tangan!',
-          )
-        : currentState.copyWith(
-            aiHand: newHand,
-            deck: newDeck,
-            message: 'AI WITCH: AI menukar kartu!',
-          );
+    return currentState.copyWith(
+      deck: remainingDeck,
+      witchOptions: options,
+      isWitchPicking: true,
+      witchSourceIsPlayer: isPlayer,
+      message: isPlayer
+          ? 'WITCH: Pilih kartu sabotase!'
+          : 'AI WITCH: AI sedang memilih...',
+    );
   }
 }

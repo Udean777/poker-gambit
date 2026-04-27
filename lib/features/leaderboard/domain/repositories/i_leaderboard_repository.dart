@@ -1,4 +1,4 @@
-import 'package:card_games/features/leaderboard/domain/models/leaderboard_entry.dart';
+import 'package:poker_gambit/features/leaderboard/domain/models/leaderboard_entry.dart';
 
 abstract class ILeaderboardRepository {
   Future<List<LeaderboardEntry>> getTopEntries({int limit = 10});

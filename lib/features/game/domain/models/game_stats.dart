@@ -1,4 +1,4 @@
-import 'package:card_games/features/game/domain/models/poker_hand.dart';
+import 'package:poker_gambit/features/game/domain/models/poker_hand.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable

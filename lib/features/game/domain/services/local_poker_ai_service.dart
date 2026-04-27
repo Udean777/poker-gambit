@@ -1,7 +1,7 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/poker_hand.dart';
-import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
-import 'package:card_games/features/game/domain/logic/i_poker_evaluator.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/poker_hand.dart';
+import 'package:poker_gambit/features/game/domain/services/i_poker_ai_service.dart';
+import 'package:poker_gambit/features/game/domain/logic/i_poker_evaluator.dart';
 
 class LocalPokerAiService implements IPokerAiService {
   final IPokerEvaluator _evaluator;
@@ -135,5 +135,26 @@ class LocalPokerAiService implements IPokerAiService {
     }
 
     return orderedIndices;
+  }
+
+  @override
+  Future<CardModel> selectWorstCard(List<CardModel> options) async {
+    // Berikan jeda seolah sedang berpikir
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+    // Strategi Sabotase: Pilih kartu dengan nilai terendah yang bukan Joker
+    final sorted = List<CardModel>.from(options)
+      ..sort((a, b) {
+        if (a.suit == CardSuit.joker) {
+          return 1; // Joker adalah kartu bagus, jangan dipilih untuk sabotase
+        }
+        if (b.suit == CardSuit.joker) return -1;
+        // Ace (1) biasanya kuat, tapi dalam urutan nilai mentah dia 1.
+        // Namun kita cari yang paling tidak berguna.
+        // Kartu 2-6 biasanya dianggap "sampah".
+        return a.value.compareTo(b.value);
+      });
+
+    return sorted.first;
   }
 }

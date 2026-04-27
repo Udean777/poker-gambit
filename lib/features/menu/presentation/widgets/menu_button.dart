@@ -1,4 +1,4 @@
-import 'package:card_games/core/theme/game_theme.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
 import 'package:flutter/material.dart';
 
 class MenuButton extends StatelessWidget {
@@ -75,9 +75,9 @@ class MenuButton extends StatelessWidget {
                   child: Text(
                     label,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: 18,
-                          color: baseColor.withValues(alpha: opacity),
-                        ),
+                      fontSize: 18,
+                      color: baseColor.withValues(alpha: opacity),
+                    ),
                   ),
                 ),
                 if (isLocked)

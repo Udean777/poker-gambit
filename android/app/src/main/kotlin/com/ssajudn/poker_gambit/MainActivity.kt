@@ -1,4 +1,4 @@
-package com.ssajud.card_games.card_games
+package com.ssajudn.poker_gambit
 
 import io.flutter.embedding.android.FlutterActivity
 

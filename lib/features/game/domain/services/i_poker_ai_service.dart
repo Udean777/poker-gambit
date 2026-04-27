@@ -1,4 +1,4 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
 
 abstract class IPokerAiService {
   /// Decides which cards the AI should discard.
@@ -14,4 +14,7 @@ abstract class IPokerAiService {
     List<CardModel> playerCardsOnTable, {
     int timeLeft = 0,
   });
+
+  /// Selects the "worst" card from a list to sabotage the opponent.
+  Future<CardModel> selectWorstCard(List<CardModel> options);
 }

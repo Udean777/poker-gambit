@@ -6,6 +6,7 @@ class AppUser {
   final String displayName;
   final String? email;
   final String? photoUrl;
+  final String? googlePhotoUrl;
   final bool isGuest;
 
   const AppUser({
@@ -13,6 +14,7 @@ class AppUser {
     required this.displayName,
     this.email,
     this.photoUrl,
+    this.googlePhotoUrl,
     required this.isGuest,
   });
 
@@ -21,6 +23,7 @@ class AppUser {
     String? displayName,
     String? email,
     String? photoUrl,
+    String? googlePhotoUrl,
     bool? isGuest,
   }) {
     return AppUser(
@@ -28,6 +31,7 @@ class AppUser {
       displayName: displayName ?? this.displayName,
       email: email ?? this.email,
       photoUrl: photoUrl ?? this.photoUrl,
+      googlePhotoUrl: googlePhotoUrl ?? this.googlePhotoUrl,
       isGuest: isGuest ?? this.isGuest,
     );
   }
@@ -38,6 +42,7 @@ class AppUser {
       'displayName': displayName,
       'email': email,
       'photoUrl': photoUrl,
+      'googlePhotoUrl': googlePhotoUrl,
       'isGuest': isGuest,
     };
   }
@@ -51,6 +56,7 @@ class AppUser {
           displayName == other.displayName &&
           email == other.email &&
           photoUrl == other.photoUrl &&
+          googlePhotoUrl == other.googlePhotoUrl &&
           isGuest == other.isGuest;
 
   @override
@@ -59,5 +65,6 @@ class AppUser {
       displayName.hashCode ^
       email.hashCode ^
       photoUrl.hashCode ^
+      googlePhotoUrl.hashCode ^
       isGuest.hashCode;
 }

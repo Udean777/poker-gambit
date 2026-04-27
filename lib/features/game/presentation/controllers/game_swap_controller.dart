@@ -1,8 +1,8 @@
-import 'package:card_games/core/constants/game_constants.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/presentation/controllers/swap_animation_orchestrator.dart';
-import 'package:card_games/features/game/presentation/providers/game_provider.dart';
-import 'package:card_games/features/game/presentation/widgets/animations/discard_animation.dart';
+import 'package:poker_gambit/core/constants/game_constants.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/presentation/controllers/swap_animation_orchestrator.dart';
+import 'package:poker_gambit/features/game/presentation/providers/game_provider.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/animations/discard_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

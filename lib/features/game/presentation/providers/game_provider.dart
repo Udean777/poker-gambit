@@ -1,27 +1,27 @@
-import 'package:card_games/core/providers/connectivity_provider.dart';
-import 'package:card_games/features/auth/presentation/providers/auth_provider.dart';
-import 'package:card_games/features/game/data/repositories/firebase_game_repository.dart';
-import 'package:card_games/features/game/data/repositories/local_game_repository.dart';
-import 'package:card_games/features/game/data/repositories/offline_first_game_repository.dart';
-import 'package:card_games/features/game/domain/logic/card_effects/card_effect_handler.dart';
-import 'package:card_games/features/game/domain/logic/i_poker_evaluator.dart';
-import 'package:card_games/features/game/domain/logic/poker_evaluator.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/domain/models/sync_status.dart';
-import 'package:card_games/features/game/domain/repositories/i_game_repository.dart';
-import 'package:card_games/features/game/domain/services/deck_service.dart';
-import 'package:card_games/features/game/domain/services/i_deck_service.dart';
-import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
-import 'package:card_games/features/game/domain/services/local_poker_ai_service.dart';
-import 'package:card_games/features/game/domain/usecases/apply_card_effect_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/evaluate_round_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/execute_ai_turn_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/get_stats_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/play_card_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/save_game_result_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/start_new_game_usecase.dart';
-import 'package:card_games/features/game/domain/usecases/swap_cards_usecase.dart';
-import 'package:card_games/features/game/presentation/providers/game_notifier.dart';
+import 'package:poker_gambit/core/providers/connectivity_provider.dart';
+import 'package:poker_gambit/features/auth/presentation/providers/auth_provider.dart';
+import 'package:poker_gambit/features/game/data/repositories/firebase_game_repository.dart';
+import 'package:poker_gambit/features/game/data/repositories/local_game_repository.dart';
+import 'package:poker_gambit/features/game/data/repositories/offline_first_game_repository.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/card_effect_handler.dart';
+import 'package:poker_gambit/features/game/domain/logic/i_poker_evaluator.dart';
+import 'package:poker_gambit/features/game/domain/logic/poker_evaluator.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/models/sync_status.dart';
+import 'package:poker_gambit/features/game/domain/repositories/i_game_repository.dart';
+import 'package:poker_gambit/features/game/domain/services/deck_service.dart';
+import 'package:poker_gambit/features/game/domain/services/i_deck_service.dart';
+import 'package:poker_gambit/features/game/domain/services/i_poker_ai_service.dart';
+import 'package:poker_gambit/features/game/domain/services/local_poker_ai_service.dart';
+import 'package:poker_gambit/features/game/domain/usecases/apply_card_effect_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/evaluate_round_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/execute_ai_turn_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/get_stats_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/play_card_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/save_game_result_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/start_new_game_usecase.dart';
+import 'package:poker_gambit/features/game/domain/usecases/swap_cards_usecase.dart';
+import 'package:poker_gambit/features/game/presentation/providers/game_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final pokerEvaluatorProvider = Provider<IPokerEvaluator>(
@@ -106,5 +106,6 @@ final gameProvider = StateNotifierProvider<GameNotifier, GameState>((ref) {
     saveGameResultUseCase: ref.watch(saveGameResultUseCaseProvider),
     aiService: ref.watch(aiServiceProvider),
     deckService: ref.watch(deckServiceProvider),
+    evaluator: ref.watch(pokerEvaluatorProvider),
   );
 });

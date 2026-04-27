@@ -1,6 +1,5 @@
-import 'package:card_games/features/game/domain/logic/card_effects/i_card_effect.dart';
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/logic/card_effects/i_card_effect.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
 
 class DestroyerEffect implements ICardEffect {
   @override
@@ -16,16 +15,12 @@ class DestroyerEffect implements ICardEffect {
         : currentState.playerTableCards;
     if (targetTable.isEmpty) return currentState;
 
-    final newTable = List<CardModel>.from(targetTable)..removeLast();
-
-    return isPlayer
-        ? currentState.copyWith(
-            aiTableCards: newTable,
-            message: 'JOKER: Menghancurkan kartu AI!',
-          )
-        : currentState.copyWith(
-            playerTableCards: newTable,
-            message: 'AI JOKER: Kartu Anda dihancurkan!',
-          );
+    return currentState.copyWith(
+      isDestroyPicking: true,
+      destroySourceIsPlayer: isPlayer,
+      message: isPlayer
+          ? 'JOKER: Pilih kartu lawan untuk dihancurkan!'
+          : 'AI JOKER: AI sedang menargetkan kartu Anda...',
+    );
   }
 }

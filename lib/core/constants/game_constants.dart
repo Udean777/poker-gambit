@@ -20,7 +20,6 @@ class GameConstants {
   static const Duration aiPlayDelay = Duration(milliseconds: 1200);
   static const Duration showdownDelay = Duration(milliseconds: 1500);
   static const Duration nextRoundDelay = Duration(seconds: 4);
-  static const Duration qteDuration = Duration(milliseconds: 1500);
   static const Duration spyRevealDuration = Duration(seconds: 2);
   static const Duration pauseCheckDelay = Duration(milliseconds: 200);
 

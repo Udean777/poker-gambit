@@ -1,6 +1,6 @@
-import 'package:card_games/features/game/domain/models/game_stats.dart';
-import 'package:card_games/features/game/domain/models/poker_hand.dart';
-import 'package:card_games/features/game/domain/repositories/i_game_repository.dart';
+import 'package:poker_gambit/features/game/domain/models/game_stats.dart';
+import 'package:poker_gambit/features/game/domain/models/poker_hand.dart';
+import 'package:poker_gambit/features/game/domain/repositories/i_game_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseGameRepository implements IGameRepository {

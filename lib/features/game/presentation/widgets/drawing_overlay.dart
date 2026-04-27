@@ -60,9 +60,9 @@ class DrawingOverlay extends StatelessWidget {
       child: Text(
         "$selectedCount KARTU",
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -86,10 +86,9 @@ class DrawingOverlay extends StatelessWidget {
         ),
         label: Text(
           hasSelection ? "TUKAR" : (isMidGame ? "NANTI" : "LEWATI"),
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: 14,
-                letterSpacing: 1,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontSize: 14, letterSpacing: 1),
         ),
         icon: Icon(hasSelection ? Icons.swap_horiz : Icons.forward, size: 20),
       ),

@@ -1,6 +1,6 @@
-import 'package:card_games/features/game/domain/models/card_model.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
-import 'package:card_games/features/game/domain/services/i_poker_ai_service.dart';
+import 'package:poker_gambit/features/game/domain/models/card_model.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/services/i_poker_ai_service.dart';
 
 class AiTurnResult {
   final GameState stateAfterSwap;

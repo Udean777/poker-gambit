@@ -1,5 +1,5 @@
 import 'dart:ui' show lerpDouble;
-import 'package:card_games/features/game/presentation/widgets/animations/mini_card_back.dart';
+import 'package:poker_gambit/features/game/presentation/widgets/animations/mini_card_back.dart';
 import 'package:flutter/material.dart';
 
 class DrawItem {

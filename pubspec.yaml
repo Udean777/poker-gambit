@@ -1,4 +1,4 @@
-name: card_games
+name: poker_gambit
 description: "Poker Gambit - A high-stakes strategic card game with AI opponent."
 publish_to: 'none'
 version: 1.0.0+1
@@ -15,19 +15,27 @@ dependencies:
   riverpod_annotation: ^2.3.5
 
   # Game & Animation
-  flame: ^1.11.0         # Jika ingin performa game loop murni
-  google_fonts: ^6.1.0   # Tipografi game yang keren
-  flutter_svg: ^2.0.10+1 # Untuk aset kartu vektor agar tidak pecah
-  audioplayers: ^5.2.1   # Sound effects
-  cached_network_image: ^3.4.1
-  google_generative_ai: ^0.4.7
+  flame: ^1.11.0
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.10+1
+  audioplayers: ^5.2.1
+  cached_network_image: ^3.3.1
   flutter_dotenv: ^6.0.1
   shared_preferences: ^2.5.5
+  
+  # Firebase & Auth (Downgraded for classic GSI support)
   firebase_core: ^4.7.0
   firebase_auth: ^6.4.0
   cloud_firestore: ^6.3.0
-  google_sign_in: ^7.2.0
+  google_sign_in: ^6.2.2
+  firebase_storage: ^13.3.0
+  firebase_app_check: ^0.4.3
+  
   connectivity_plus: ^7.1.1
+  image_picker: ^1.2.1
+  intl: ^0.20.2
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +49,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/images/
     - assets/images/cards/

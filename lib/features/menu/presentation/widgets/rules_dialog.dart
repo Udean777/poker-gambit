@@ -1,4 +1,4 @@
-import 'package:card_games/core/theme/game_theme.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
 import 'package:flutter/material.dart';
 
 class RulesDialog extends StatelessWidget {
@@ -53,7 +53,7 @@ class RulesDialog extends StatelessWidget {
               "J (Spy): Mengintip 1 kartu tangan lawan secara acak.",
             ),
             _buildRuleItem(
-              "Q (Witch): Menukar 1 kartu di tangan Anda dari dek.",
+              "Q (Witch): Pilih 1 dari 4 kartu dek untuk menyabotase (mengganti acak) kartu tangan lawan.",
             ),
             _buildRuleItem(
               "Joker (Destroyer): Menghapus kartu terakhir lawan di meja.",
@@ -68,11 +68,7 @@ class RulesDialog extends StatelessWidget {
               "Slot 4 (Suit Lock): Harus sama simbol dengan Slot 3. Jika beda, nilai kartu jadi 0!",
             ),
 
-            const SizedBox(height: 16),
-            _buildSectionTitle(context, "🛡️ COUNTER & TIMER"),
-            _buildRuleItem(
-              "Gunakan tombol COUNTER saat AI memakai skill untuk menggagalkannya!",
-            ),
+            _buildSectionTitle(context, "⏲️ TIMER"),
             _buildRuleItem(
               "Waktu terbatas! Jika timer habis, kartu akan terpasang otomatis.",
             ),

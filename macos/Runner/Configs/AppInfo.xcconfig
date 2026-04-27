@@ -7,6 +7,6 @@
 // The application's name. By default this is also the title of the Flutter window.
 PRODUCT_NAME = Poker Gambit
 
-PRODUCT_BUNDLE_IDENTIFIER = com.ssajud.cardgames.cardGames
+PRODUCT_BUNDLE_IDENTIFIER = com.ssajudn.pokerGambit
 
 PRODUCT_COPYRIGHT = Copyright © 2026 ssajudn. All rights reserved.

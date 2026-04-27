@@ -1,5 +1,5 @@
-import 'package:card_games/core/theme/game_theme.dart';
-import 'package:card_games/core/utils/time_utils.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
+import 'package:poker_gambit/core/utils/time_utils.dart';
 import 'package:flutter/material.dart';
 
 class PlayerInfo extends StatelessWidget {
@@ -47,10 +47,10 @@ class PlayerInfo extends StatelessWidget {
           Text(
             name,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isTurn ? Colors.white : Colors.white38,
-                  fontSize: 12,
-                  letterSpacing: 1,
-                ),
+              color: isTurn ? Colors.white : Colors.white38,
+              fontSize: 12,
+              letterSpacing: 1,
+            ),
           ),
           if (isTurn) ...[
             const SizedBox(width: 6),
@@ -58,11 +58,9 @@ class PlayerInfo extends StatelessWidget {
               Text(
                 TimeUtils.formatSeconds(timeLeft!),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: timeLeft! <= 3
-                          ? Colors.redAccent
-                          : Colors.amber,
-                      fontSize: 14,
-                    ),
+                  color: timeLeft! <= 3 ? Colors.redAccent : Colors.amber,
+                  fontSize: 14,
+                ),
               )
             else
               Container(

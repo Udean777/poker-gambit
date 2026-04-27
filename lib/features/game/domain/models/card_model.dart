@@ -1,4 +1,4 @@
-import 'package:card_games/core/config/app_config.dart';
+import 'package:poker_gambit/core/config/app_config.dart';
 import 'package:flutter/foundation.dart';
 
 enum CardSuit { heart, diamond, club, spade, joker }

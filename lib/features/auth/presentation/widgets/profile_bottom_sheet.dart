@@ -1,6 +1,6 @@
-import 'package:card_games/core/theme/game_theme.dart';
-import 'package:card_games/features/auth/domain/models/app_user.dart';
-import 'package:card_games/features/auth/presentation/providers/auth_provider.dart';
+import 'package:poker_gambit/core/theme/game_theme.dart';
+import 'package:poker_gambit/features/auth/domain/models/app_user.dart';
+import 'package:poker_gambit/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -87,17 +87,41 @@ class _ProfileBottomSheetState extends ConsumerState<ProfileBottomSheet> {
                 },
               ),
           ],
-          if (authState.hasError) ...[
+          if (authState.hasError &&
+              !authState.error.toString().contains('Login dibatalkan') &&
+              !authState.error.toString().contains('canceled')) ...[
             const SizedBox(height: 12),
-            Text(
-              authState.error.toString(),
-              style: const TextStyle(color: Colors.redAccent, fontSize: 12),
-              textAlign: TextAlign.center,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.redAccent.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.redAccent.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Text(
+                _formatError(authState.error!),
+                style: const TextStyle(color: Colors.redAccent, fontSize: 12),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ],
       ),
     );
+  }
+
+  String _formatError(Object error) {
+    final errStr = error.toString();
+    if (errStr.contains('network-request-failed')) {
+      return 'Koneksi internet bermasalah';
+    }
+    if (errStr.contains('credential-already-in-use')) {
+      return 'Akun Google ini sudah terhubung ke user lain';
+    }
+    if (errStr.contains('invalid-credential')) return 'Kredensial tidak valid';
+    return 'Gagal menghubungkan akun. Silakan coba lagi.';
   }
 
   Widget _buildUserInfo(AppUser? user) {

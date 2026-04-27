@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:card_games/features/game/domain/models/game_state.dart';
+import 'package:poker_gambit/features/game/domain/models/game_state.dart';
 
 mixin GameTimerMixin on StateNotifier<GameState> {
   Timer? _turnTimer;
